@@ -1,6 +1,7 @@
 -r base.txt
 
 coverage
+coveralls
 httpretty
 nose
 sure
