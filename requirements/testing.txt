@@ -1,0 +1,7 @@
+-r base.txt
+
+coverage
+httpretty
+nose
+sure
+tox

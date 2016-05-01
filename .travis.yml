@@ -1,0 +1,13 @@
+language: python
+
+python:
+  - 2.7
+  - 3.3
+  - 3.4
+  - 3.5
+
+script:
+  - tox -e coverage
+
+after_success:
+  - coveralls
