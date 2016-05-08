@@ -39,4 +39,4 @@ class FixerioLatestTestCase(unittest.TestCase):
 
         expected_message = ('400 Client Error: Bad Request for url: '
                             'http://api.fixer.io/latest')
-        self.assertEqual(ex.exception.message, expected_message)
+        self.assertEqual(str(ex.exception), expected_message)

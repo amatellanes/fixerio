@@ -34,4 +34,4 @@ class Fixerio(object):
 
             return response.json()
         except requests.exceptions.RequestException as ex:
-            raise FixerioException(ex.message)
+            raise FixerioException(str(ex))
