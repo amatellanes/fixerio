@@ -3,5 +3,4 @@
 coverage
 httpretty
 nose
-sure
 tox
