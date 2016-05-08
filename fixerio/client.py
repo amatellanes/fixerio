@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 try:
     from urllib.parse import urljoin
 except ImportError:
@@ -9,6 +11,10 @@ BASE_URL = 'http://api.fixer.io/'
 LATEST_PATH = '/latest'
 
 
+class FixerioException(BaseException):
+    pass
+
+
 class Fixerio(object):
     """ A client for Fixer.io. """
 
@@ -16,9 +22,16 @@ class Fixerio(object):
     def latest():
         """ Get the latest foreign exchange reference rates.
 
-        :return: the latest foreign exchange reference rates
+        :return: the latest foreign exchange reference rates.
         :rtype: dict
+        :raises FixerioException: if any error making a request.
         """
-        response = requests.get(urljoin(BASE_URL, LATEST_PATH))
+        try:
+            url = urljoin(BASE_URL, LATEST_PATH)
+            response = requests.get(url)
 
-        return response.json()
+            response.raise_for_status()
+
+            return response.json()
+        except requests.exceptions.RequestException as ex:
+            raise FixerioException(ex.message)
