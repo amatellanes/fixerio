@@ -1,6 +1,8 @@
 -r base.txt
 
 coverage
+flake8
 httpretty
 nose
+prospector
 tox
