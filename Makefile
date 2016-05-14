@@ -32,7 +32,7 @@ clean-test:
 	rm -fr htmlcov/
 
 coverage:
-	nosetests --with-coverage --cover-package=fixerio --cover-html --cover-html-dir=htmlcov
+	nosetests --config=.noserc
 
 make lint:
 	flake8
