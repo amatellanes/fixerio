@@ -50,15 +50,15 @@ class FixerioLatestTestCase(unittest.TestCase):
         with self.assertRaises(FixerioException)as ex:
             Fixerio.latest()
 
-        expected_message = ('400 Client Error: Bad Request for url: '
-                            'http://api.fixer.io/latest')
+        expected_message = (('400 Client Error: Bad Request for url: '
+                             '{0}').format(self.url))
         self.assertEqual(str(ex.exception), expected_message)
 
 
 class FixerioHistoricalRatesTestCase(unittest.TestCase):
     def setUp(self):
         self.date = date(2000, 1, 3)
-        self.path = '/{}'.format(self.date.isoformat())
+        self.path = '/{0}'.format(self.date.isoformat())
         self.url = urljoin(BASE_URL, self.path)
 
     @httpretty.activate
@@ -118,3 +118,18 @@ class FixerioHistoricalRatesTestCase(unittest.TestCase):
         self.assertEqual(request.path, self.path)
         self.assertEqual(request.querystring, {})
         self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_raises_exception_if_bad_request(self):
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body="{'success': false}",
+                               status=400,
+                               content_type='text/json')
+
+        with self.assertRaises(FixerioException)as ex:
+            Fixerio.historical_rates(date=self.date)
+
+        expected_message = (('400 Client Error: Bad Request for url: '
+                             '{0}').format(self.url))
+        self.assertEqual(str(ex.exception), expected_message)

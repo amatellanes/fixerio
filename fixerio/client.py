@@ -40,8 +40,25 @@ class Fixerio(object):
 
     @staticmethod
     def historical_rates(date):
-        if isinstance(date, datetime.date):
-            date = date.isoformat()
-        url = urljoin(BASE_URL, date)
-        response = requests.get(url)
-        return response.json()
+        """
+        Get historical rates for any day since `date`.
+
+        :param date: a date
+        :type date: date or str
+        :return: the historical rates for any day since `date`.
+        :rtype: dict
+        :raises FixerioException: if any error making a request.
+        """
+        try:
+            if isinstance(date, datetime.date):
+                # Convert date to ISO 8601 format.
+                date = date.isoformat()
+
+            url = urljoin(BASE_URL, date)
+            response = requests.get(url)
+
+            response.raise_for_status()
+
+            return response.json()
+        except requests.exceptions.RequestException as ex:
+            raise FixerioException(str(ex))
