@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import datetime
+
 try:
     from urllib.parse import urljoin
 except ImportError:
@@ -35,3 +37,11 @@ class Fixerio(object):
             return response.json()
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
+
+    @staticmethod
+    def historical_rates(date):
+        if isinstance(date, datetime.date):
+            date = date.isoformat()
+        url = urljoin(BASE_URL, date)
+        response = requests.get(url)
+        return response.json()
