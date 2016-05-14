@@ -35,11 +35,7 @@ class Fixerio(object):
         :raises FixerioException: if any error making a request.
         """
         try:
-            base = base or self.base
-            if base is not None:
-                payload = {'base': base}
-            else:
-                payload = {}
+            payload = {'base': base or self.base}
 
             url = urljoin(BASE_URL, LATEST_PATH)
             response = requests.get(url, params=payload)
@@ -67,11 +63,7 @@ class Fixerio(object):
                 # Convert date to ISO 8601 format.
                 date = date.isoformat()
 
-            base = base or self.base
-            if base is not None:
-                payload = {'base': base}
-            else:
-                payload = {}
+            payload = {'base': base or self.base}
 
             url = urljoin(BASE_URL, date)
             response = requests.get(url, params=payload)
