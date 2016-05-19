@@ -22,7 +22,7 @@ class FixerioInitTestCase(unittest.TestCase):
     def test_sets_none_base_attribute_if_default_base_passed(self):
         self.default_base = 'EUR'
 
-        client = Fixerio(self.default_base)
+        client = Fixerio(base=self.default_base)
 
         self.assertIsNone(client.base)
 
@@ -37,6 +37,18 @@ class FixerioInitTestCase(unittest.TestCase):
         client = Fixerio(base=self.base)
 
         self.assertEqual(client.base, self.base)
+
+    def test_sets_none_symbols_attribute_if_it_not_passed(self):
+        client = Fixerio()
+
+        self.assertIsNone(client.symbols)
+
+    def test_sets_symbols_attribute(self):
+        self.symbols = ['USD', 'GBP']
+
+        client = Fixerio(symbols=self.symbols)
+
+        self.assertEqual(client.symbols, self.symbols)
 
 
 class FixerioLatestTestCase(unittest.TestCase):

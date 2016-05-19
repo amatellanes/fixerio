@@ -22,8 +22,15 @@ class FixerioException(BaseException):
 class Fixerio(object):
     """ A client for Fixer.io. """
 
-    def __init__(self, base=DEFAULT_BASE):
+    def __init__(self, base=DEFAULT_BASE, symbols=None):
+        """
+        :param base: currency to quote rates.
+        :type base: str or unicode
+        :param symbols: currency symbols to request specific exchange rates.
+        :type symbols: list or tuple
+        """
         self.base = base if base != DEFAULT_BASE else None
+        self.symbols = symbols
 
     def latest(self, base=None):
         """ Get the latest foreign exchange reference rates.
