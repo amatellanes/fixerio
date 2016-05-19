@@ -4,10 +4,8 @@ import datetime
 
 try:
     from urllib.parse import urljoin
-    from urllib.parse import urlencode
 except ImportError:  # For Python 2
     from urlparse import urljoin
-    from urllib import urlencode
 
 import requests
 
@@ -34,6 +32,25 @@ class Fixerio(object):
         self.base = base if base != DEFAULT_BASE else None
         self.symbols = symbols
 
+    @staticmethod
+    def _create_payload(base, symbols):
+        """ Creates a payload with no none values.
+
+        :param base: currency to quote rates.
+        :type base: str or unicode
+        :param symbols: currency symbols to request specific exchange rates.
+        :type symbols: list or tuple
+        :return: a payload.
+        :rtype: dict
+        """
+        payload = {}
+        if base is not None:
+            payload['base'] = base
+        if symbols is not None:
+            payload['symbols'] = ','.join(symbols)
+
+        return payload
+
     def latest(self, base=None, symbols=None):
         """ Get the latest foreign exchange reference rates.
 
@@ -46,17 +63,12 @@ class Fixerio(object):
         :raises FixerioException: if any error making a request.
         """
         try:
-            payload = {}
             base = base or self.base
-            if base is not None:
-                payload['base'] = base
             symbols = symbols or self.symbols
-            if symbols is not None:
-                payload['symbols'] = ','.join(symbols)
+            payload = Fixerio._create_payload(base, symbols)
 
             url = urljoin(BASE_URL, LATEST_PATH)
-            params = urlencode(payload)
-            response = requests.get(url, params=params)
+            response = requests.get(url, params=payload)
 
             response.raise_for_status()
 
@@ -64,7 +76,7 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def historical_rates(self, date, base=None):
+    def historical_rates(self, date, base=None, symbols=None):
         """
         Get historical rates for any day since `date`.
 
@@ -72,6 +84,8 @@ class Fixerio(object):
         :type date: date or str
         :param base: currency to quote rates.
         :type base: str or unicode
+        :param symbols: currency symbols to request specific exchange rates.
+        :type symbols: list or tuple
         :return: the historical rates for any day since `date`.
         :rtype: dict
         :raises FixerioException: if any error making a request.
@@ -81,7 +95,9 @@ class Fixerio(object):
                 # Convert date to ISO 8601 format.
                 date = date.isoformat()
 
-            payload = {'base': base or self.base}
+            base = base or self.base
+            symbols = symbols or self.symbols
+            payload = Fixerio._create_payload(base, symbols)
 
             url = urljoin(BASE_URL, date)
             response = requests.get(url, params=payload)
