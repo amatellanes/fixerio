@@ -19,19 +19,19 @@ BASE_URL = 'http://api.fixer.io'
 
 
 class FixerioInitTestCase(unittest.TestCase):
-    def test_set_none_base_attribute_if_default_base_passed(self):
+    def test_sets_none_base_attribute_if_default_base_passed(self):
         self.default_base = 'EUR'
 
         client = Fixerio(self.default_base)
 
         self.assertIsNone(client.base)
 
-    def test_set_none_base_attribute_if_it_not_passed(self):
+    def test_sets_none_base_attribute_if_it_not_passed(self):
         client = Fixerio()
 
         self.assertIsNone(client.base)
 
-    def test_set_base_attribute(self):
+    def test_sets_base_attribute(self):
         self.base = 'USD'
 
         client = Fixerio(base=self.base)
