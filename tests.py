@@ -22,7 +22,7 @@ class FixerioInitTestCase(unittest.TestCase):
     def test_sets_none_base_attribute_if_default_base_passed(self):
         self.default_base = 'EUR'
 
-        client = Fixerio(self.default_base)
+        client = Fixerio(base=self.default_base)
 
         self.assertIsNone(client.base)
 
@@ -37,6 +37,18 @@ class FixerioInitTestCase(unittest.TestCase):
         client = Fixerio(base=self.base)
 
         self.assertEqual(client.base, self.base)
+
+    def test_sets_none_symbols_attribute_if_it_not_passed(self):
+        client = Fixerio()
+
+        self.assertIsNone(client.symbols)
+
+    def test_sets_symbols_attribute(self):
+        self.symbols = ['USD', 'GBP']
+
+        client = Fixerio(symbols=self.symbols)
+
+        self.assertEqual(client.symbols, self.symbols)
 
 
 class FixerioLatestTestCase(unittest.TestCase):
@@ -75,7 +87,7 @@ class FixerioLatestTestCase(unittest.TestCase):
                                content_type='application/json')
 
         client = Fixerio(base=base)
-        response = client.latest(base=base)
+        response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -105,6 +117,57 @@ class FixerioLatestTestCase(unittest.TestCase):
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         self.assertEqual(request.path, expected_path)
         self.assertEqual(request.querystring, {'base': [base]})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
+        symbols = ['USD', 'GBP']
+        expected_response = {
+            "base": "EUR",
+            "date": "2016-05-19",
+            "rates": {"GBP": 0.76585, "USD": 1.1197}
+        }
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        client = Fixerio(symbols=symbols)
+        response = client.latest()
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        symbols_str = ','.join(symbols)
+        params = urlencode({'symbols': symbols_str})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_latest_rates_for_symbols_passed(self):
+        symbols = ['USD', 'GBP']
+        expected_response = {
+            "base": "EUR",
+            "date": "2016-05-19",
+            "rates": {"GBP": 0.76585, "USD": 1.1197}
+        }
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        response = self.client.latest(symbols=symbols)
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        symbols_str = ','.join(symbols)
+        params = urlencode({'symbols': symbols_str})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
@@ -201,6 +264,54 @@ class FixerioHistoricalRatesTestCase(unittest.TestCase):
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         self.assertEqual(request.path, expected_path)
         self.assertEqual(request.querystring, {'base': [base]})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_historical_rates_for_symbols_passed_in_constructor(self):
+        symbols = ['USD', 'GBP']
+        expected_response = {"base": "EUR",
+                             "date": "2000-01-03",
+                             "rates": {"GBP": 0.6246, "USD": 1.009}}
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        client = Fixerio(symbols=symbols)
+        response = client.historical_rates(date=self.date)
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        symbols_str = ','.join(symbols)
+        params = urlencode({'symbols': symbols_str})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_historical_rates_for_symbols_passed(self):
+        symbols = ['USD', 'GBP']
+        expected_response = {"base": "EUR",
+                             "date": "2000-01-03",
+                             "rates": {"GBP": 0.6246, "USD": 1.009}}
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        response = self.client.historical_rates(date=self.date,
+                                                symbols=symbols)
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        symbols_str = ','.join(symbols)
+        params = urlencode({'symbols': symbols_str})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
