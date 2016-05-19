@@ -87,7 +87,7 @@ class FixerioLatestTestCase(unittest.TestCase):
                                content_type='application/json')
 
         client = Fixerio(base=base)
-        response = client.latest(base=base)
+        response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -117,6 +117,57 @@ class FixerioLatestTestCase(unittest.TestCase):
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         self.assertEqual(request.path, expected_path)
         self.assertEqual(request.querystring, {'base': [base]})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
+        self.symbols = ['USD', 'GBP']
+        expected_response = {
+            "base": "EUR",
+            "date": "2016-05-19",
+            "rates": {"GBP": 0.76585, "USD": 1.1197}
+        }
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        client = Fixerio(symbols=self.symbols)
+        response = client.latest()
+
+        expected_symbols = ','.join(self.symbols)
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        params = urlencode({'symbols': expected_symbols})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [expected_symbols]})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_latest_rates_for_base_passed(self):
+        self.symbols = ['USD', 'GBP']
+        expected_response = {
+            "base": "EUR",
+            "date": "2016-05-19",
+            "rates": {"GBP": 0.76585, "USD": 1.1197}
+        }
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        response = self.client.latest(symbols=self.symbols)
+
+        expected_symbols = ','.join(self.symbols)
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        params = urlencode({'symbols': expected_symbols})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [expected_symbols]})
         self.assertEqual(request.body, b'')
 
     @httpretty.activate

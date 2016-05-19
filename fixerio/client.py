@@ -4,8 +4,10 @@ import datetime
 
 try:
     from urllib.parse import urljoin
-except ImportError:
+    from urllib.parse import urlencode
+except ImportError:  # For Python 2
     from urlparse import urljoin
+    from urllib import urlencode
 
 import requests
 
@@ -32,20 +34,29 @@ class Fixerio(object):
         self.base = base if base != DEFAULT_BASE else None
         self.symbols = symbols
 
-    def latest(self, base=None):
+    def latest(self, base=None, symbols=None):
         """ Get the latest foreign exchange reference rates.
 
         :param base: currency to quote rates.
         :type base: str or unicode
+        :param symbols: currency symbols to request specific exchange rates.
+        :type symbols: list or tuple
         :return: the latest foreign exchange reference rates.
         :rtype: dict
         :raises FixerioException: if any error making a request.
         """
         try:
-            payload = {'base': base or self.base}
+            payload = {}
+            base = base or self.base
+            if base is not None:
+                payload['base'] = base
+            symbols = symbols or self.symbols
+            if symbols is not None:
+                payload['symbols'] = ','.join(symbols)
 
             url = urljoin(BASE_URL, LATEST_PATH)
-            response = requests.get(url, params=payload)
+            params = urlencode(payload)
+            response = requests.get(url, params=params)
 
             response.raise_for_status()
 
