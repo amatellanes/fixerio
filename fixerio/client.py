@@ -9,11 +9,12 @@ except ImportError:  # For Python 2
 
 import requests
 
-DEFAULT_BASE = 'EUR'
-
 BASE_URL = 'http://api.fixer.io/'
 SECURE_BASE_URL = 'https://api.fixer.io/'
+
 LATEST_PATH = '/latest'
+
+DEFAULT_BASE = 'EUR'  # Rates are quoted against the Euro by default.
 
 
 class FixerioException(BaseException):
@@ -52,6 +53,25 @@ class Fixerio(object):
 
         return payload
 
+    @staticmethod
+    def _secure_url(secure, path):
+        """
+        Builds a URL. If `secure` is `True`, HTTPS endpoint is used. Otherwise
+        HTTP endpoint.
+
+        :param secure: enable HTTPS endpoint.
+        :type secure: bool
+        :param path: URL path component
+        :type path: unicode
+        :return: a URL
+        """
+        if secure:
+            url = urljoin(SECURE_BASE_URL, path)
+        else:
+            url = urljoin(BASE_URL, path)
+
+        return url
+
     def latest(self, base=None, symbols=None, secure=False):
         """ Get the latest foreign exchange reference rates.
 
@@ -70,10 +90,7 @@ class Fixerio(object):
             symbols = symbols or self.symbols
             payload = Fixerio._create_payload(base, symbols)
 
-            if secure:
-                url = urljoin(SECURE_BASE_URL, LATEST_PATH)
-            else:
-                url = urljoin(BASE_URL, LATEST_PATH)
+            url = Fixerio._secure_url(secure, LATEST_PATH)
             response = requests.get(url, params=payload)
 
             response.raise_for_status()
@@ -107,10 +124,7 @@ class Fixerio(object):
             symbols = symbols or self.symbols
             payload = Fixerio._create_payload(base, symbols)
 
-            if secure:
-                url = urljoin(SECURE_BASE_URL, date)
-            else:
-                url = urljoin(BASE_URL, date)
+            url = Fixerio._secure_url(secure, date)
             response = requests.get(url, params=payload)
 
             response.raise_for_status()
