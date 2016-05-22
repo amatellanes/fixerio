@@ -16,6 +16,7 @@ import httpretty
 from fixerio.client import Fixerio, FixerioException
 
 BASE_URL = 'http://api.fixer.io'
+SECURE_BASE_URL = 'https://api.fixer.io'
 
 
 class FixerioInitTestCase(unittest.TestCase):
@@ -57,6 +58,7 @@ class FixerioLatestTestCase(unittest.TestCase):
 
         self.path = '/latest'
         self.url = urljoin(BASE_URL, self.path)
+        self.secure_url = urljoin(SECURE_BASE_URL, self.path)
 
     @httpretty.activate
     def test_returns_latest_rates(self):
@@ -68,6 +70,24 @@ class FixerioLatestTestCase(unittest.TestCase):
                                content_type='application/json')
 
         response = self.client.latest()
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        self.assertEqual(request.path, self.path)
+        self.assertEqual(request.querystring, {})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_latest_rates_using_https(self):
+        expected_response = {'base': 'EUR', 'date': '2016-04-29',
+                             'rates': {'GBP': 0.78025}}
+        httpretty.register_uri(httpretty.GET,
+                               self.secure_url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        response = self.client.latest(secure=True)
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -193,6 +213,7 @@ class FixerioHistoricalRatesTestCase(unittest.TestCase):
         self.date = date(2000, 1, 3)
         self.path = '/{0}'.format(self.date.isoformat())
         self.url = urljoin(BASE_URL, self.path)
+        self.secure_url = urljoin(SECURE_BASE_URL, self.path)
 
     @httpretty.activate
     def test_returns_historical_rates(self):
@@ -214,6 +235,35 @@ class FixerioHistoricalRatesTestCase(unittest.TestCase):
         self.assertEqual(request.body, b'')
 
         response = self.client.historical_rates(date=self.date)
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        self.assertEqual(request.path, self.path)
+        self.assertEqual(request.querystring, {})
+        self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_historical_rates_using_https(self):
+        expected_response = {'base': 'EUR',
+                             'date': '2000-01-03',
+                             'rates': {'GBP': 0.6246}}
+        httpretty.register_uri(httpretty.GET,
+                               self.secure_url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        response = self.client.historical_rates(date=self.date.isoformat(),
+                                                secure=True)
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        self.assertEqual(request.path, self.path)
+        self.assertEqual(request.querystring, {})
+        self.assertEqual(request.body, b'')
+
+        response = self.client.historical_rates(date=self.date, secure=True)
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
