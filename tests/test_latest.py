@@ -20,8 +20,6 @@ SECURE_BASE_URL = 'https://api.fixer.io'
 
 class FixerioLatestTestCase(unittest.TestCase):
     def setUp(self):
-        self.client = Fixerio()
-
         self.path = '/latest'
         self.url = urljoin(BASE_URL, self.path)
 
@@ -34,7 +32,8 @@ class FixerioLatestTestCase(unittest.TestCase):
                                body=json.dumps(expected_response),
                                content_type='application/json')
 
-        response = self.client.latest()
+        client = Fixerio()
+        response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -42,6 +41,28 @@ class FixerioLatestTestCase(unittest.TestCase):
         self.assertEqual(request.path, self.path)
         self.assertEqual(request.querystring, {})
         self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_raises_exception_if_bad_request(self):
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body="{'success': false}",
+                               status=400,
+                               content_type='text/json')
+
+        with self.assertRaises(FixerioException)as ex:
+            client = Fixerio()
+            client.latest()
+
+        expected_message = (('400 Client Error: Bad Request for url: '
+                             '{0}').format(self.url))
+        self.assertEqual(str(ex.exception), expected_message)
+
+
+class FixerioLatestBaseTestCase(unittest.TestCase):
+    def setUp(self):
+        self.path = '/latest'
+        self.url = urljoin(BASE_URL, self.path)
 
     @httpretty.activate
     def test_returns_latest_rates_for_base_passed_in_constructor(self):
@@ -66,7 +87,7 @@ class FixerioLatestTestCase(unittest.TestCase):
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
-    def test_returns_latest_rates_for_base_passed(self):
+    def test_returns_latest_rates_for_base_passed_in_method(self):
         base = 'USD'
         expected_response = {'base': base, 'date': '2016-05-13',
                              'rates': {'GBP': 0.69403}}
@@ -75,7 +96,8 @@ class FixerioLatestTestCase(unittest.TestCase):
                                body=json.dumps(expected_response),
                                content_type='application/json')
 
-        response = self.client.latest(base=base)
+        client = Fixerio()
+        response = client.latest(base=base)
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -85,6 +107,35 @@ class FixerioLatestTestCase(unittest.TestCase):
         self.assertEqual(request.path, expected_path)
         self.assertEqual(request.querystring, {'base': [base]})
         self.assertEqual(request.body, b'')
+
+    @httpretty.activate
+    def test_returns_latest_rates_for_base_passed_in_method_if_both(self):
+        base = 'USD'
+        another_base = 'EUR'
+        expected_response = {'base': base, 'date': '2016-05-13',
+                             'rates': {'GBP': 0.69403}}
+        httpretty.register_uri(httpretty.GET,
+                               self.url,
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
+
+        client = Fixerio(base=another_base)
+        response = client.latest(base=base)
+
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        params = urlencode({'base': base})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'base': [base]})
+        self.assertEqual(request.body, b'')
+
+
+class FixerioLatestSymbolsTestCase(unittest.TestCase):
+    def setUp(self):
+        self.path = '/latest'
+        self.url = urljoin(BASE_URL, self.path)
 
     @httpretty.activate
     def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
@@ -113,7 +164,7 @@ class FixerioLatestTestCase(unittest.TestCase):
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
-    def test_returns_latest_rates_for_symbols_passed(self):
+    def test_returns_latest_rates_for_symbols_passed_in_method(self):
         symbols = ['USD', 'GBP']
         expected_response = {
             "base": "EUR",
@@ -125,7 +176,8 @@ class FixerioLatestTestCase(unittest.TestCase):
                                body=json.dumps(expected_response),
                                content_type='application/json')
 
-        response = self.client.latest(symbols=symbols)
+        client = Fixerio()
+        response = client.latest(symbols=symbols)
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -138,30 +190,41 @@ class FixerioLatestTestCase(unittest.TestCase):
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
-    def test_raises_exception_if_bad_request(self):
+    def test_returns_latest_rates_for_symbols_passed_in_method_if_both(self):
+        symbols = ['USD', 'GBP']
+        other_symbols = ['JPY', 'EUR']
+        expected_response = {
+            "base": "EUR",
+            "date": "2016-05-19",
+            "rates": {"GBP": 0.76585, "USD": 1.1197}
+        }
         httpretty.register_uri(httpretty.GET,
                                self.url,
-                               body="{'success': false}",
-                               status=400,
-                               content_type='text/json')
+                               body=json.dumps(expected_response),
+                               content_type='application/json')
 
-        with self.assertRaises(FixerioException)as ex:
-            self.client.latest()
+        client = Fixerio(symbols=other_symbols)
+        response = client.latest(symbols=symbols)
 
-        expected_message = (('400 Client Error: Bad Request for url: '
-                             '{0}').format(self.url))
-        self.assertEqual(str(ex.exception), expected_message)
+        self.assertDictEqual(response, expected_response)
+        request = httpretty.last_request()
+        self.assertEqual(request.method, 'GET')
+        symbols_str = ','.join(symbols)
+        params = urlencode({'symbols': symbols_str})
+        expected_path = '{url}?{params}'.format(url=self.path, params=params)
+        self.assertEqual(request.path, expected_path)
+        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
+        self.assertEqual(request.body, b'')
 
 
-class FixerioSecureLatestTestCase(unittest.TestCase):
+class FixerioLatestSecureTestCase(unittest.TestCase):
     def setUp(self):
-        self.client = Fixerio()
-
         self.path = '/latest'
+        self.url = urljoin(BASE_URL, self.path)
         self.secure_url = urljoin(SECURE_BASE_URL, self.path)
 
     @httpretty.activate
-    def test_returns_latest_rates(self):
+    def test_returns_latest_rates_for_secure_passed_in_constructor(self):
         expected_response = {'base': 'EUR', 'date': '2016-04-29',
                              'rates': {'GBP': 0.78025}}
         httpretty.register_uri(httpretty.GET,
@@ -169,7 +232,8 @@ class FixerioSecureLatestTestCase(unittest.TestCase):
                                body=json.dumps(expected_response),
                                content_type='application/json')
 
-        response = self.client.latest(secure=True)
+        client = Fixerio(secure=True)
+        response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
@@ -179,110 +243,39 @@ class FixerioSecureLatestTestCase(unittest.TestCase):
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
-    def test_returns_latest_rates_for_base_passed_in_constructor(self):
-        base = 'USD'
-        expected_response = {'base': base, 'date': '2016-05-13',
-                             'rates': {'GBP': 0.69403}}
+    def test_returns_latest_rates_for_secure_passed_in_method(self):
+        expected_response = {'base': 'EUR', 'date': '2016-04-29',
+                             'rates': {'GBP': 0.78025}}
         httpretty.register_uri(httpretty.GET,
                                self.secure_url,
                                body=json.dumps(expected_response),
                                content_type='application/json')
 
-        client = Fixerio(base=base)
+        client = Fixerio()
         response = client.latest(secure=True)
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
         self.assertEqual(request.method, 'GET')
-        params = urlencode({'base': base})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        self.assertEqual(request.path, expected_path)
-        self.assertEqual(request.querystring, {'base': [base]})
+        self.assertEqual(request.path, self.path)
+        self.assertEqual(request.querystring, {})
         self.assertEqual(request.body, b'')
 
     @httpretty.activate
-    def test_returns_latest_rates_for_base_passed(self):
-        base = 'USD'
-        expected_response = {'base': base, 'date': '2016-05-13',
-                             'rates': {'GBP': 0.69403}}
+    def test_returns_latest_rates_for_secure_passed_in_method_if_both(self):
+        expected_response = {'base': 'EUR', 'date': '2016-04-29',
+                             'rates': {'GBP': 0.78025}}
         httpretty.register_uri(httpretty.GET,
                                self.secure_url,
                                body=json.dumps(expected_response),
                                content_type='application/json')
 
-        response = self.client.latest(base=base, secure=True)
-
-        self.assertDictEqual(response, expected_response)
-        request = httpretty.last_request()
-        self.assertEqual(request.method, 'GET')
-        params = urlencode({'base': base})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        self.assertEqual(request.path, expected_path)
-        self.assertEqual(request.querystring, {'base': [base]})
-        self.assertEqual(request.body, b'')
-
-    @httpretty.activate
-    def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
-        symbols = ['USD', 'GBP']
-        expected_response = {
-            "base": "EUR",
-            "date": "2016-05-19",
-            "rates": {"GBP": 0.76585, "USD": 1.1197}
-        }
-        httpretty.register_uri(httpretty.GET,
-                               self.secure_url,
-                               body=json.dumps(expected_response),
-                               content_type='application/json')
-
-        client = Fixerio(symbols=symbols)
+        client = Fixerio(secure=False)
         response = client.latest(secure=True)
 
         self.assertDictEqual(response, expected_response)
         request = httpretty.last_request()
         self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
-        params = urlencode({'symbols': symbols_str})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        self.assertEqual(request.path, expected_path)
-        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
+        self.assertEqual(request.path, self.path)
+        self.assertEqual(request.querystring, {})
         self.assertEqual(request.body, b'')
-
-    @httpretty.activate
-    def test_returns_latest_rates_for_symbols_passed(self):
-        symbols = ['USD', 'GBP']
-        expected_response = {
-            "base": "EUR",
-            "date": "2016-05-19",
-            "rates": {"GBP": 0.76585, "USD": 1.1197}
-        }
-        httpretty.register_uri(httpretty.GET,
-                               self.secure_url,
-                               body=json.dumps(expected_response),
-                               content_type='application/json')
-
-        response = self.client.latest(symbols=symbols, secure=True)
-
-        self.assertDictEqual(response, expected_response)
-        request = httpretty.last_request()
-        self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
-        params = urlencode({'symbols': symbols_str})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        self.assertEqual(request.path, expected_path)
-        self.assertEqual(request.querystring, {'symbols': [symbols_str]})
-        self.assertEqual(request.body, b'')
-
-    @httpretty.activate
-    def test_raises_exception_if_bad_request(self):
-        httpretty.register_uri(httpretty.GET,
-                               self.secure_url,
-                               body="{'success': false}",
-                               status=400,
-                               content_type='text/json')
-
-        with self.assertRaises(FixerioException)as ex:
-            self.client.latest(secure=True)
-
-        expected_message = (('400 Client Error: Bad Request for url: '
-                             '{0}').format(self.secure_url))
-        self.assertEqual(str(ex.exception), expected_message)
