@@ -13,7 +13,8 @@ except ImportError:  # For Python 2
 
 import httpretty
 
-from fixerio.client import Fixerio, FixerioException
+from fixerio.client import Fixerio
+from fixerio.exceptions import FixerioException
 
 BASE_URL = 'http://api.fixer.io'
 SECURE_BASE_URL = 'https://api.fixer.io'

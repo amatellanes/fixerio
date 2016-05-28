@@ -9,16 +9,14 @@ except ImportError:  # For Python 2
 
 import requests
 
+from .exceptions import FixerioException
+
 BASE_URL = 'http://api.fixer.io/'
 SECURE_BASE_URL = 'https://api.fixer.io/'
 
 LATEST_PATH = '/latest'
 
 DEFAULT_BASE = 'EUR'  # Rates are quoted against the Euro by default.
-
-
-class FixerioException(BaseException):
-    pass
 
 
 class Fixerio(object):
