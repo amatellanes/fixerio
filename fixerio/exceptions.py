@@ -1,0 +1,2 @@
+class FixerioException(BaseException):
+    pass

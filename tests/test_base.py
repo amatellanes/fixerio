@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import unittest
+
 from fixerio.client import Fixerio
 
 
@@ -35,3 +36,15 @@ class FixerioInitTestCase(unittest.TestCase):
         client = Fixerio(symbols=symbols)
 
         self.assertEqual(client.symbols, symbols)
+
+    def test_sets_no_secure_attribute_if_it_is_not_passed(self):
+        client = Fixerio()
+
+        self.assertFalse(client.secure)
+
+    def test_sets_secure_attribute(self):
+        secure = True
+
+        client = Fixerio(secure=secure)
+
+        self.assertEqual(client.secure, secure)
