@@ -4,6 +4,7 @@ SHELL := /bin/bash
 help:
 	@echo "Usage:"
 	@echo " clean           remove all build, test, coverage and Python artifacts."
+	@echo " clean-docs      remove docs artifacts."
 	@echo " clean-build     remove build artifacts."
 	@echo " clean-pyc       remove Python file artifacts."
 	@echo " clean-test      remove test and coverage artifacts."
@@ -12,7 +13,11 @@ help:
 	@echo " make test       run test suite."
 
 .PHONY: clean
-clean: clean-test clean-build clean-pyc
+clean: clean-docs clean-test clean-build clean-pyc
+
+.PHONY: clean-docs
+clean-docs:
+	rm -fr docs/build
 
 .PHONY: clean-build
 clean-build:
