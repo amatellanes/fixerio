@@ -11,6 +11,8 @@ help:
 	@echo " make coverage   run test suite with coverage."
 	@echo " make lint       run code checker."
 	@echo " make test       run test suite."
+	@echo " make build      build source distribution."
+	@echo " make wheel      build universal wheel."
 
 .PHONY: clean
 clean: clean-docs clean-test clean-build clean-pyc
@@ -53,3 +55,11 @@ make lint:
 .PHONY: test
 test:
 	nosetests
+
+.PHONY: build
+build:
+	python setup.py sdist
+
+.PHONY: wheel
+wheel:
+	python setup.py bdist_wheel --universal
