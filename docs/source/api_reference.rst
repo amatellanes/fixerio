@@ -1,3 +1,5 @@
+.. :api_reference:
+
 API Reference
 -------------
 
