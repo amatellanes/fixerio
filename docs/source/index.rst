@@ -7,6 +7,8 @@
 
 .. include:: api_reference.rst
 
+.. include:: ../../CHANGELOG.rst
+
 Indices and tables
 ==================
 
