@@ -1,4 +1,5 @@
 -r testing.txt
 
 Sphinx
+check-manifest
 ipdb
