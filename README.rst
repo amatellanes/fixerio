@@ -1,7 +1,7 @@
 A Python client for `Fixer.io`_
 ===============================
 
-|Build Status| |Coverage Status| |Stories in Ready|
+|Build Status| |Coverage Status| |Stories in Ready| |Supports Wheel format|
 
 `Fixer.io`_ is a free JSON API for current and historical foreign
 exchange rates published by the European Central Bank.
@@ -272,3 +272,5 @@ All exceptions that ``fixerio`` explicitly raises are
    :target: https://coveralls.io/github/amatellanes/fixerio?branch=feature%2Flatest-rates
 .. |Stories in Ready| image:: https://badge.waffle.io/amatellanes/fixerio.png?label=ready&title=Ready
    :target: https://waffle.io/amatellanes/fixerio
+.. |Supports Wheel format| image:: https://img.shields.io/pypi/wheel/fixerio.svg
+   :target: https://pypi.python.org/pypi/fixerio/
