@@ -277,5 +277,5 @@ All exceptions that ``fixerio`` explicitly raises are
    :target: https://pypi.python.org/pypi/fixerio/
 .. |Latest PyPI version| image:: https://img.shields.io/pypi/v/fixerio.svg
    :target: https://pypi.python.org/pypi/fixerio/
-.. |Number of PyPI downloads|image:: https://img.shields.io/pypi/dm/fixerio.svg
+.. |Number of PyPI downloads| image:: https://img.shields.io/pypi/dm/fixerio.svg
    :target: https://pypi.python.org/pypi/fixerio/
