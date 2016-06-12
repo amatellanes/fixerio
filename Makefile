@@ -20,7 +20,7 @@ clean: clean-docs clean-test clean-build clean-pyc
 
 .PHONY: clean-docs
 clean-docs:
-	rm -fr docs/build
+	rm -fr docs/_build
 
 .PHONY: clean-build
 clean-build:
