@@ -13,8 +13,8 @@ install:
   - pip install tox coveralls
 
 script:
-  - tox -e lint
-  - tox -e coverage
+  - make lint
+  - make coverage
 
 after_success:
   - coveralls
