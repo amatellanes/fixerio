@@ -5,7 +5,7 @@ import datetime
 try:
     from urllib.parse import urljoin
 except ImportError:  # For Python 2
-    from urlparse import urljoin
+    from urlparse import urljoin  # noqa
 
 import requests
 
