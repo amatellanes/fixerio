@@ -13,6 +13,7 @@ help:
 	@echo " make test       run test suite."
 	@echo " make build      build source distribution."
 	@echo " make wheel      build universal wheel."
+	@echo " make upload     upload distributions."
 	@echo " make manifest   check MANIFEST.in."
 
 .PHONY: clean
@@ -63,7 +64,11 @@ build:
 
 .PHONY: wheel
 wheel:
-	python setup.py bdist_wheel --universal
+	python setup.py bdist_wheel
+
+.PHONY: upload
+upload:
+	python setup.py sdist bdist_wheel upload
 
 .PHONY: manifest
 manifest:
