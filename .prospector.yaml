@@ -1,0 +1,7 @@
+pep8:
+    full: true
+
+strictness: high
+
+uses:
+    - flask
