@@ -10,10 +10,12 @@ python:
   - "pypy"
 
 install:
-  - pip install tox coveralls
+  - pip install -r requirements/testing.txt
+  - pip install coveralls
 
 script:
-  - tox -e coverage
+  - make lint
+  - make coverage
 
 after_success:
   - coveralls
