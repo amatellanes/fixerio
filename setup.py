@@ -17,6 +17,10 @@ with open('README.rst') as f:
 with open('CHANGELOG.rst') as f:
     changelog = f.read()
 
+requirements = ['requests==2.10.0']
+test_requirements = ['coverage==4.1', 'flake8==2.5.5', 'httpretty==	0.8.14',
+                     'nose==1.3.7', 'prospector==0.11.7', 'tox==2.3.1']
+
 setup(
     name='fixerio',
     version='0.1',
@@ -25,7 +29,7 @@ setup(
     author="Adrian Matellanes",
     author_email='matellanesadrian@gmail.com',
     url='https://github.com/amatellanes/fixerio',
-    install_requires=['requests>=1.0'],
+    install_requires=requirements,
     license='MIT License',
     packages=['fixerio'],
     package_dir={'fixerio': 'fixerio'},
@@ -44,6 +48,5 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: PyPy'
     ),
-    tests_require=['coverage', 'flake8', 'httpretty', 'nose', 'prospector',
-                   'tox'],
+    tests_require=test_requirements,
 )
