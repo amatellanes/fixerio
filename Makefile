@@ -11,8 +11,10 @@ help:
 	@echo " make coverage   run test suite with coverage."
 	@echo " make lint       run code checker."
 	@echo " make test       run test suite."
+	@echo " make register   register package."
 	@echo " make build      build source distribution."
 	@echo " make wheel      build universal wheel."
+	@echo " make upload     upload distributions."
 	@echo " make manifest   check MANIFEST.in."
 
 .PHONY: clean
@@ -57,13 +59,21 @@ make lint:
 test:
 	nosetests
 
+.PHONY: register
+register:
+	python setup.py register
+
 .PHONY: build
 build:
 	python setup.py sdist
 
 .PHONY: wheel
 wheel:
-	python setup.py bdist_wheel --universal
+	python setup.py bdist_wheel
+
+.PHONY: upload
+upload:
+	python setup.py sdist bdist_wheel upload
 
 .PHONY: manifest
 manifest:
