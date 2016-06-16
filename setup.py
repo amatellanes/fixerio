@@ -23,7 +23,7 @@ test_requirements = ['coverage==4.1', 'flake8==2.5.5', 'httpretty==	0.8.14',
 
 setup(
     name='fixerio',
-    version='0.1',
+    version=version,
     description='A Python client for Fixer.io',
     long_description=readme + '\n\n' + changelog,
     author="Adrian Matellanes",
