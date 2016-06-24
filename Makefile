@@ -8,14 +8,14 @@ help:
 	@echo " clean-build     remove build artifacts."
 	@echo " clean-pyc       remove Python file artifacts."
 	@echo " clean-test      remove test and coverage artifacts."
-	@echo " make coverage   run test suite with coverage."
-	@echo " make lint       run code checker."
-	@echo " make test       run test suite."
-	@echo " make register   register package."
-	@echo " make build      build source distribution."
-	@echo " make wheel      build universal wheel."
-	@echo " make upload     upload distributions."
-	@echo " make manifest   check MANIFEST.in."
+	@echo " coverage   run test suite with coverage."
+	@echo " lint       run code checker."
+	@echo " test       run test suite."
+	@echo " register   register package."
+	@echo " build      build source distribution."
+	@echo " wheel      build universal wheel."
+	@echo " upload     upload distributions."
+	@echo " manifest   check MANIFEST.in."
 
 .PHONY: clean
 clean: clean-docs clean-test clean-build clean-pyc
