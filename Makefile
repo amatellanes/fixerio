@@ -3,19 +3,19 @@ SHELL := /bin/bash
 .PHONY: help
 help:
 	@echo "Usage:"
-	@echo " clean           remove all build, test, coverage and Python artifacts."
-	@echo " clean-docs      remove docs artifacts."
-	@echo " clean-build     remove build artifacts."
-	@echo " clean-pyc       remove Python file artifacts."
-	@echo " clean-test      remove test and coverage artifacts."
-	@echo " coverage   run test suite with coverage."
-	@echo " lint       run code checker."
-	@echo " test       run test suite."
-	@echo " register   register package."
-	@echo " build      build source distribution."
-	@echo " wheel      build universal wheel."
-	@echo " upload     upload distributions."
-	@echo " manifest   check MANIFEST.in."
+	@echo " clean       remove all build, test, coverage and Python artifacts."
+	@echo " clean-docs  remove docs artifacts."
+	@echo " clean-build remove build artifacts."
+	@echo " clean-pyc   remove Python file artifacts."
+	@echo " clean-test  remove test and coverage artifacts."
+	@echo " coverage    run test suite with coverage."
+	@echo " lint        run code checker."
+	@echo " test        run test suite."
+	@echo " register    register package."
+	@echo " build       build source distribution."
+	@echo " wheel       build universal wheel."
+	@echo " upload      upload distributions."
+	@echo " manifest    check MANIFEST.in."
 
 .PHONY: clean
 clean: clean-docs clean-test clean-build clean-pyc
