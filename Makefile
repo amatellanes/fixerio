@@ -51,7 +51,7 @@ coverage:
 	nosetests --config=.noserc
 
 .PHONY: lint
-make lint:
+lint:
 	flake8
 	prospector --messages-only
 
