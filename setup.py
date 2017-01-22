@@ -19,7 +19,7 @@ with open('CHANGELOG.rst') as f:
 
 requirements = ['requests==2.10.0']
 test_requirements = ['coverage==4.1', 'flake8==2.5.5', 'httpretty==	0.8.14',
-                     'nose==1.3.7', 'prospector==0.11.7', 'tox==2.3.1']
+                     'nose==1.3.7', 'tox==2.3.1']
 
 setup(
     name='fixerio',

@@ -53,7 +53,6 @@ coverage:
 .PHONY: lint
 lint:
 	flake8
-	prospector --messages-only
 
 .PHONY: test
 test:
