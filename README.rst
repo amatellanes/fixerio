@@ -2,8 +2,7 @@ A Python client for `Fixer.io`_
 ===============================
 
 |Build Status| |Coverage Status| |Stories in Ready| |Supports Wheel format|
-|Latest PyPI version| |Number of PyPI downloads| |Documentation Status|
-|Requirements Status|
+|Latest PyPI version| |Documentation Status| |Requirements Status|
 
 `Fixer.io`_ is a free JSON API for current and historical foreign
 exchange rates published by the European Central Bank.
@@ -277,8 +276,6 @@ All exceptions that ``fixerio`` explicitly raises are
 .. |Supports Wheel format| image:: https://img.shields.io/pypi/wheel/fixerio.svg
    :target: https://pypi.python.org/pypi/fixerio/
 .. |Latest PyPI version| image:: https://img.shields.io/pypi/v/fixerio.svg
-   :target: https://pypi.python.org/pypi/fixerio/
-.. |Number of PyPI downloads| image:: https://img.shields.io/pypi/dm/fixerio.svg
    :target: https://pypi.python.org/pypi/fixerio/
 .. |Documentation Status| image:: https://readthedocs.org/projects/fixerio/badge/?version=latest
    :target: http://fixerio.readthedocs.io/en/latest/?badge=latest
