@@ -1,0 +1,8 @@
+check-manifest
+coverage
+flake8
+httpretty
+nose
+requests
+Sphinx
+tox

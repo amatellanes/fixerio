@@ -1,5 +1,0 @@
--r testing.txt
-
-Sphinx==1.4.4
-check-manifest==0.31
-ipdb==0.10.1
