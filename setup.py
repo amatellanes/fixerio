@@ -17,9 +17,7 @@ with open('README.rst') as f:
 with open('CHANGELOG.rst') as f:
     changelog = f.read()
 
-requirements = ['requests==2.10.0']
-test_requirements = ['coverage==4.1', 'flake8==2.5.5', 'httpretty==	0.8.14',
-                     'nose==1.3.7', 'tox==2.3.1']
+requirements = ['requests>=2.0']
 
 setup(
     name='fixerio',
@@ -48,5 +46,4 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: PyPy'
     ),
-    tests_require=test_requirements,
 )
