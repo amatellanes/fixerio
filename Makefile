@@ -9,6 +9,7 @@ help:
 	@echo " clean-pyc   remove Python file artifacts."
 	@echo " clean-test  remove test and coverage artifacts."
 	@echo " coverage    run test suite with coverage."
+	@echo " freeze    	freeze requirements."
 	@echo " install    	install requirements."
 	@echo " lint        run code checker."
 	@echo " test        run test suite."
@@ -50,6 +51,10 @@ clean-test:
 .PHONY: coverage
 coverage:
 	nosetests --config=.noserc
+
+.PHONY: freeze
+freeze:
+	pip freeze > requirements.txt
 
 .PHONY: install
 install:
