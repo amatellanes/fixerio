@@ -1,7 +1,7 @@
 A Python client for `Fixer.io`_
 ===============================
 
-|Build Status| |Coverage Status| |Stories in Ready| |Supports Wheel format|
+|Build Status| |Coverage Status| |Supports Wheel format|
 |Latest PyPI version| |Documentation Status| |Requirements Status|
 
 `Fixer.io`_ is a free JSON API for current and historical foreign
@@ -271,8 +271,6 @@ All exceptions that ``fixerio`` explicitly raises are
    :target: https://travis-ci.org/amatellanes/fixerio
 .. |Coverage Status| image:: https://coveralls.io/repos/github/amatellanes/fixerio/badge.svg?branch=feature%2Flatest-rates
    :target: https://coveralls.io/github/amatellanes/fixerio?branch=feature%2Flatest-rates
-.. |Stories in Ready| image:: https://badge.waffle.io/amatellanes/fixerio.png?label=ready&title=Ready
-   :target: https://waffle.io/amatellanes/fixerio
 .. |Supports Wheel format| image:: https://img.shields.io/pypi/wheel/fixerio.svg
    :target: https://pypi.python.org/pypi/fixerio/
 .. |Latest PyPI version| image:: https://img.shields.io/pypi/v/fixerio.svg
