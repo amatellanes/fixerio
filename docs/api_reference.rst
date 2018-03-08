@@ -10,6 +10,7 @@ this part of the documentation is for you.
 ~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: fixerio.client
+    :noindex:
     :members:
     :undoc-members:
     :show-inheritance:
@@ -18,6 +19,7 @@ this part of the documentation is for you.
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: fixerio.exceptions
+    :noindex:
     :members:
     :undoc-members:
     :show-inheritance:
