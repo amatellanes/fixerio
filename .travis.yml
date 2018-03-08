@@ -9,9 +9,8 @@ python:
   - "3.6"
   - "3.6-dev"
   - "3.7-dev"
-  - "3.8-dev"
   - "nightly"
-  - "pypy2.7"
+  - "pypy"
   - "pypy3.5"
 
 install:
