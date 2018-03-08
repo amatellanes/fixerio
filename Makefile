@@ -60,6 +60,10 @@ freeze:
 install:
 	pip install -r requirements.txt
 
+.PHONY: install-to-freeze
+install-to-freeze:
+	pip install -r requirements-to-freeze.txt
+
 .PHONY: lint
 lint:
 	flake8
