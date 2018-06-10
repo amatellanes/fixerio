@@ -21,8 +21,10 @@ SECURE_BASE_URL = 'https://data.fixer.io/api/'
 
 class FixerioLatestTestCase(unittest.TestCase):
     def setUp(self):
+        self.access_key = 'test-access-key'
         self.path = 'latest'
-        self.url = BASE_URL + self.path
+        query = urlencode({'access_key': self.access_key})
+        self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
     def test_returns_latest_rates(self):
@@ -33,7 +35,7 @@ class FixerioLatestTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio()
+        client = Fixerio(self.access_key)
         response = client.latest()
 
         self.assertDictEqual(response, expected_response)
@@ -51,7 +53,7 @@ class FixerioLatestTestCase(unittest.TestCase):
                       content_type='text/json')
 
         with self.assertRaises(FixerioException)as ex:
-            client = Fixerio()
+            client = Fixerio(self.access_key)
             client.latest()
 
         expected_message = (('400 Client Error: Bad Request for url: '
@@ -61,8 +63,10 @@ class FixerioLatestTestCase(unittest.TestCase):
 
 class FixerioLatestBaseTestCase(unittest.TestCase):
     def setUp(self):
+        self.access_key = 'test-access-key'
         self.path = 'latest'
-        self.url = BASE_URL + self.path
+        query = urlencode({'access_key': self.access_key})
+        self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
     def test_returns_latest_rates_for_base_passed_in_constructor(self):
@@ -74,13 +78,13 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(base=base)
+        client = Fixerio(self.access_key, base=base)
         response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        params = urlencode({'base': base})
+        params = urlencode({'access_key': self.access_key, 'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -96,13 +100,13 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio()
+        client = Fixerio(self.access_key)
         response = client.latest(base=base)
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        params = urlencode({'base': base})
+        params = urlencode({'access_key': self.access_key, 'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -119,13 +123,13 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(base=another_base)
+        client = Fixerio(self.access_key, base=another_base)
         response = client.latest(base=base)
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        params = urlencode({'base': base})
+        params = urlencode({'access_key': self.access_key, 'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -134,8 +138,10 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
 
 class FixerioLatestSymbolsTestCase(unittest.TestCase):
     def setUp(self):
+        self.access_key = 'test-access-key'
         self.path = 'latest'
-        self.url = BASE_URL + self.path
+        query = urlencode({'access_key': self.access_key})
+        self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
@@ -150,14 +156,15 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(symbols=symbols)
+        client = Fixerio(self.access_key, symbols=symbols)
         response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         symbols_str = ','.join(symbols)
-        params = urlencode({'symbols': symbols_str})
+        params = urlencode(
+            {'access_key': self.access_key, 'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -176,14 +183,15 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio()
+        client = Fixerio(self.access_key)
         response = client.latest(symbols=symbols)
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         symbols_str = ','.join(symbols)
-        params = urlencode({'symbols': symbols_str})
+        params = urlencode(
+            {'access_key': self.access_key, 'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -203,14 +211,15 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(symbols=other_symbols)
+        client = Fixerio(self.access_key, symbols=other_symbols)
         response = client.latest(symbols=symbols)
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         symbols_str = ','.join(symbols)
-        params = urlencode({'symbols': symbols_str})
+        params = urlencode(
+            {'access_key': self.access_key, 'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -219,9 +228,10 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
 
 class FixerioLatestSecureTestCase(unittest.TestCase):
     def setUp(self):
+        self.access_key = 'test-access-key'
         self.path = 'latest'
-        self.url = BASE_URL + self.path
-        self.secure_url = SECURE_BASE_URL + self.path
+        query = urlencode({'access_key': self.access_key})
+        self.secure_url = SECURE_BASE_URL + self.path + '?' + query
 
     @responses.activate
     def test_returns_latest_rates_for_secure_passed_in_constructor(self):
@@ -232,7 +242,7 @@ class FixerioLatestSecureTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(secure=True)
+        client = Fixerio(self.access_key, secure=True)
         response = client.latest()
 
         self.assertDictEqual(response, expected_response)
@@ -250,7 +260,7 @@ class FixerioLatestSecureTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio()
+        client = Fixerio(self.access_key)
         response = client.latest(secure=True)
 
         self.assertDictEqual(response, expected_response)
@@ -268,7 +278,7 @@ class FixerioLatestSecureTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(secure=False)
+        client = Fixerio(self.access_key, secure=False)
         response = client.latest(secure=True)
 
         self.assertDictEqual(response, expected_response)
