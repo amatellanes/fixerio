@@ -16,7 +16,7 @@ from fixerio.client import Fixerio
 from fixerio.exceptions import FixerioException
 
 BASE_URL = 'http://data.fixer.io/api/'
-SECURE_BASE_URL = 'https://api.fixer.io'
+SECURE_BASE_URL = 'https://data.fixer.io/api/'
 
 
 class FixerioLatestTestCase(unittest.TestCase):
@@ -221,7 +221,7 @@ class FixerioLatestSecureTestCase(unittest.TestCase):
     def setUp(self):
         self.path = 'latest'
         self.url = BASE_URL + self.path
-        self.secure_url = urljoin(SECURE_BASE_URL, self.path)
+        self.secure_url = SECURE_BASE_URL + self.path
 
     @responses.activate
     def test_returns_latest_rates_for_secure_passed_in_constructor(self):

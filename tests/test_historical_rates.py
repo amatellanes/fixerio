@@ -17,7 +17,7 @@ from fixerio.client import Fixerio
 from fixerio.exceptions import FixerioException
 
 BASE_URL = 'http://data.fixer.io/api'
-SECURE_BASE_URL = 'https://api.fixer.io'
+SECURE_BASE_URL = 'https://data.fixer.io/api'
 
 
 class FixerioHistoricalRatesTestCase(unittest.TestCase):
@@ -228,7 +228,7 @@ class FixerioHistoricalRatesSecureTestCase(unittest.TestCase):
         self.date = date(2000, 1, 3)
         self.path = '/{0}'.format(self.date.isoformat())
         self.url = BASE_URL + self.path
-        self.secure_url = urljoin(SECURE_BASE_URL, self.path)
+        self.secure_url = SECURE_BASE_URL + self.path
 
     @responses.activate
     def test_returns_historical_rates_for_secure_passed_in_constructor(self):

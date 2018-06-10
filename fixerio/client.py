@@ -12,7 +12,7 @@ import requests
 from .exceptions import FixerioException
 
 BASE_URL = 'http://data.fixer.io/api/'
-SECURE_BASE_URL = 'https://api.fixer.io/'
+SECURE_BASE_URL = 'https://data.fixer.io/api/'
 
 LATEST_PATH = 'latest'
 
@@ -67,7 +67,7 @@ class Fixerio(object):
         :return: a URL
         """
         if secure:
-            url = urljoin(SECURE_BASE_URL, path)
+            url = SECURE_BASE_URL + path
         else:
             url = BASE_URL + path
 
