@@ -5,11 +5,11 @@ import unittest
 from datetime import date
 
 try:
-    from urllib.parse import urljoin
-    from urllib.parse import urlencode
+    from urllib.parse import urljoin  # noqa: F401
+    from urllib.parse import urlencode  # noqa: F401
 except ImportError:  # For Python 2
-    from urlparse import urljoin
-    from urllib import urlencode
+    from urlparse import urljoin  # noqa: F401
+    from urllib import urlencode  # noqa: F401
 
 import responses
 
