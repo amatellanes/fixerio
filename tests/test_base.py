@@ -8,7 +8,7 @@ from fixerio.client import Fixerio
 class FixerioInitTestCase(unittest.TestCase):
     def test_raises_if_access_key_is_not_passed(self):
         with self.assertRaises(TypeError):
-            _ = Fixerio()
+            Fixerio()
 
     def test_sets_access_key(self):
         access_key = 'test-access-key'
