@@ -15,14 +15,14 @@ import responses
 from fixerio.client import Fixerio
 from fixerio.exceptions import FixerioException
 
-BASE_URL = 'http://api.fixer.io'
+BASE_URL = 'http://data.fixer.io/api/'
 SECURE_BASE_URL = 'https://api.fixer.io'
 
 
 class FixerioLatestTestCase(unittest.TestCase):
     def setUp(self):
-        self.path = '/latest'
-        self.url = urljoin(BASE_URL, self.path)
+        self.path = 'latest'
+        self.url = BASE_URL + self.path
 
     @responses.activate
     def test_returns_latest_rates(self):
@@ -61,8 +61,8 @@ class FixerioLatestTestCase(unittest.TestCase):
 
 class FixerioLatestBaseTestCase(unittest.TestCase):
     def setUp(self):
-        self.path = '/latest'
-        self.url = urljoin(BASE_URL, self.path)
+        self.path = 'latest'
+        self.url = BASE_URL + self.path
 
     @responses.activate
     def test_returns_latest_rates_for_base_passed_in_constructor(self):
@@ -82,7 +82,7 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
         self.assertEqual(request.method, 'GET')
         params = urlencode({'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -104,7 +104,7 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
         self.assertEqual(request.method, 'GET')
         params = urlencode({'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -127,15 +127,15 @@ class FixerioLatestBaseTestCase(unittest.TestCase):
         self.assertEqual(request.method, 'GET')
         params = urlencode({'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
 
 class FixerioLatestSymbolsTestCase(unittest.TestCase):
     def setUp(self):
-        self.path = '/latest'
-        self.url = urljoin(BASE_URL, self.path)
+        self.path = 'latest'
+        self.url = BASE_URL + self.path
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
@@ -159,7 +159,7 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         symbols_str = ','.join(symbols)
         params = urlencode({'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -185,7 +185,7 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         symbols_str = ','.join(symbols)
         params = urlencode({'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -212,15 +212,15 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         symbols_str = ','.join(symbols)
         params = urlencode({'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
 
 class FixerioLatestSecureTestCase(unittest.TestCase):
     def setUp(self):
-        self.path = '/latest'
-        self.url = urljoin(BASE_URL, self.path)
+        self.path = 'latest'
+        self.url = BASE_URL + self.path
         self.secure_url = urljoin(SECURE_BASE_URL, self.path)
 
     @responses.activate

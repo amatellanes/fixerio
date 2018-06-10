@@ -16,7 +16,7 @@ import responses
 from fixerio.client import Fixerio
 from fixerio.exceptions import FixerioException
 
-BASE_URL = 'http://api.fixer.io'
+BASE_URL = 'http://data.fixer.io/api'
 SECURE_BASE_URL = 'https://api.fixer.io'
 
 
@@ -24,7 +24,7 @@ class FixerioHistoricalRatesTestCase(unittest.TestCase):
     def setUp(self):
         self.date = date(2000, 1, 3)
         self.path = '/{0}'.format(self.date.isoformat())
-        self.url = urljoin(BASE_URL, self.path)
+        self.url = BASE_URL + self.path
 
     @responses.activate
     def test_returns_historical_rates(self):
@@ -74,7 +74,7 @@ class FixerioHistoricalRatesBaseTestCase(unittest.TestCase):
     def setUp(self):
         self.date = date(2000, 1, 3)
         self.path = '/{0}'.format(self.date.isoformat())
-        self.url = urljoin(BASE_URL, self.path)
+        self.url = BASE_URL + self.path
 
     @responses.activate
     def test_returns_historical_rates_for_base_passed_in_constructor(self):
@@ -95,7 +95,7 @@ class FixerioHistoricalRatesBaseTestCase(unittest.TestCase):
         self.assertEqual(request.method, 'GET')
         params = urlencode({'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -116,7 +116,7 @@ class FixerioHistoricalRatesBaseTestCase(unittest.TestCase):
         self.assertEqual(request.method, 'GET')
         params = urlencode({'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -138,7 +138,7 @@ class FixerioHistoricalRatesBaseTestCase(unittest.TestCase):
         self.assertEqual(request.method, 'GET')
         params = urlencode({'base': base})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -147,7 +147,7 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
     def setUp(self):
         self.date = date(2000, 1, 3)
         self.path = '/{0}'.format(self.date.isoformat())
-        self.url = urljoin(BASE_URL, self.path)
+        self.url = BASE_URL + self.path
 
     @responses.activate
     def test_returns_historical_rates_for_symbols_passed_in_constructor(self):
@@ -169,7 +169,7 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         symbols_str = ','.join(symbols)
         params = urlencode({'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -193,7 +193,7 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         symbols_str = ','.join(symbols)
         params = urlencode({'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -218,7 +218,7 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         symbols_str = ','.join(symbols)
         params = urlencode({'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = urljoin(BASE_URL, expected_path)
+        expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
 
@@ -227,7 +227,7 @@ class FixerioHistoricalRatesSecureTestCase(unittest.TestCase):
     def setUp(self):
         self.date = date(2000, 1, 3)
         self.path = '/{0}'.format(self.date.isoformat())
-        self.url = urljoin(BASE_URL, self.path)
+        self.url = BASE_URL + self.path
         self.secure_url = urljoin(SECURE_BASE_URL, self.path)
 
     @responses.activate

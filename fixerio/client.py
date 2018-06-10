@@ -11,10 +11,10 @@ import requests
 
 from .exceptions import FixerioException
 
-BASE_URL = 'http://api.fixer.io/'
+BASE_URL = 'http://data.fixer.io/api/'
 SECURE_BASE_URL = 'https://api.fixer.io/'
 
-LATEST_PATH = '/latest'
+LATEST_PATH = 'latest'
 
 DEFAULT_BASE = 'EUR'  # Rates are quoted against the Euro by default.
 
@@ -69,7 +69,7 @@ class Fixerio(object):
         if secure:
             url = urljoin(SECURE_BASE_URL, path)
         else:
-            url = urljoin(BASE_URL, path)
+            url = BASE_URL + path
 
         return url
 
