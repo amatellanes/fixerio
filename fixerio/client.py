@@ -39,11 +39,9 @@ class Fixerio(object):
         self.symbols = symbols
         self.secure = secure
 
-    def _create_payload(self, access_key, base, symbols):
+    def _create_payload(self, base, symbols):
         """ Creates a payload with no none values.
 
-        :param access_key: your API Key.
-        :type access_key: str or unicode
         :param base: currency to quote rates.
         :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
@@ -51,12 +49,7 @@ class Fixerio(object):
         :return: a payload.
         :rtype: dict
         """
-        payload = {}
-
-        if access_key is not None:
-            payload['access_key'] = access_key
-        else:
-            payload['access_key'] = self.access_key
+        payload = {'access_key': self.access_key}
         if base is not None:
             payload['base'] = base
         if symbols is not None:
@@ -83,11 +76,9 @@ class Fixerio(object):
 
         return url
 
-    def latest(self, access_key=None, base=None, symbols=None, secure=False):
+    def latest(self, base=None, symbols=None, secure=False):
         """ Get the latest foreign exchange reference rates.
 
-        :param access_key: your API Key.
-        :type access_key: str or unicode
         :param base: currency to quote rates.
         :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
@@ -101,7 +92,7 @@ class Fixerio(object):
         try:
             base = base or self.base
             symbols = symbols or self.symbols
-            payload = self._create_payload(access_key, base, symbols)
+            payload = self._create_payload(base, symbols)
 
             secure = secure or self.secure
             url = Fixerio._secure_url(secure, LATEST_PATH)
@@ -114,15 +105,12 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def historical_rates(self, date, access_key=None, base=None, symbols=None,
-                         secure=False):
+    def historical_rates(self, date, base=None, symbols=None, secure=False):
         """
         Get historical rates for any day since `date`.
 
         :param date: a date
         :type date: date or str
-        :param access_key: your API Key.
-        :type access_key: str or unicode
         :param base: currency to quote rates.
         :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
@@ -140,7 +128,7 @@ class Fixerio(object):
 
             base = base or self.base
             symbols = symbols or self.symbols
-            payload = self._create_payload(access_key, base, symbols)
+            payload = self._create_payload(base, symbols)
 
             secure = secure or self.secure
             url = Fixerio._secure_url(secure, date)
