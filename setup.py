@@ -33,7 +33,7 @@ setup(
     package_dir={'fixerio': 'fixerio'},
     include_package_data=True,
     zip_safe=False,
-    classifiers=(
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
@@ -47,5 +47,5 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: PyPy'
-    ),
+    ],
 )
