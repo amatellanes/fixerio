@@ -16,42 +16,32 @@ SECURE_BASE_URL = 'https://data.fixer.io/api/'
 
 LATEST_PATH = 'latest'
 
-DEFAULT_BASE = 'EUR'  # Rates are quoted against the Euro by default.
-
 
 class Fixerio(object):
     """ A client for Fixer.io. """
 
-    def __init__(self, access_key, base=DEFAULT_BASE, symbols=None,
-                 secure=False):
+    def __init__(self, access_key, symbols=None, secure=False):
         """
         :param access_key: your API Key.
         :type access_key: str or unicode
-        :param base: currency to quote rates.
-        :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
         :type symbols: list or tuple
         :param secure: enable HTTPS endpoint.
         :type secure: bool
         """
         self.access_key = access_key
-        self.base = base if base != DEFAULT_BASE else None
         self.symbols = symbols
         self.secure = secure
 
-    def _create_payload(self, base, symbols):
+    def _create_payload(self, symbols):
         """ Creates a payload with no none values.
 
-        :param base: currency to quote rates.
-        :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
         :type symbols: list or tuple
         :return: a payload.
         :rtype: dict
         """
         payload = {'access_key': self.access_key}
-        if base is not None:
-            payload['base'] = base
         if symbols is not None:
             payload['symbols'] = ','.join(symbols)
 
@@ -76,11 +66,9 @@ class Fixerio(object):
 
         return url
 
-    def latest(self, base=None, symbols=None, secure=False):
+    def latest(self, symbols=None, secure=False):
         """ Get the latest foreign exchange reference rates.
 
-        :param base: currency to quote rates.
-        :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
         :type symbols: list or tuple
         :param secure: enable HTTPS endpoint.
@@ -90,9 +78,8 @@ class Fixerio(object):
         :raises FixerioException: if any error making a request.
         """
         try:
-            base = base or self.base
             symbols = symbols or self.symbols
-            payload = self._create_payload(base, symbols)
+            payload = self._create_payload(symbols)
 
             secure = secure or self.secure
             url = Fixerio._secure_url(secure, LATEST_PATH)
@@ -105,14 +92,12 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def historical_rates(self, date, base=None, symbols=None, secure=False):
+    def historical_rates(self, date, symbols=None, secure=False):
         """
         Get historical rates for any day since `date`.
 
         :param date: a date
         :type date: date or str
-        :param base: currency to quote rates.
-        :type base: str or unicode
         :param symbols: currency symbols to request specific exchange rates.
         :type symbols: list or tuple
         :param secure: enable HTTPS endpoint.
@@ -126,9 +111,8 @@ class Fixerio(object):
                 # Convert date to ISO 8601 format.
                 date = date.isoformat()
 
-            base = base or self.base
             symbols = symbols or self.symbols
-            payload = self._create_payload(base, symbols)
+            payload = self._create_payload(symbols)
 
             secure = secure or self.secure
             url = Fixerio._secure_url(secure, date)
