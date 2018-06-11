@@ -147,34 +147,6 @@ Request specific exchange rates by setting the ``symbols`` parameter.
      u'rates': {u'GBP': 0.76245, u'USD': 1.1168}}
     '''
 
-An HTTPS endpoint is available.
-
-.. code:: python
-
-    >>> from fixerio import Fixerio
-
-    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY', secure=True)
-    >>> fxrio.latest()
-    '''
-    {u'base': u'EUR',
-     u'date': u'2016-05-27',
-     u'rates': {u'AUD': 1.5483,
-     ...
-    '''
-
-.. code:: python
-
-    >>> from fixerio import Fixerio
-
-    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
-    >>> fxrio.latest(secure=True)
-    '''
-    {u'base': u'EUR',
-     u'date': u'2016-05-27',
-     u'rates': {u'AUD': 1.5483,
-     ...
-    '''
-
 All exceptions that ``fixerio`` explicitly raises are
 ``fixerio.exceptions.FixerioException``.
 

@@ -28,15 +28,3 @@ class FixerioInitTestCase(unittest.TestCase):
         client = Fixerio('test-access-key', symbols=symbols)
 
         self.assertEqual(client.symbols, symbols)
-
-    def test_sets_no_secure_attribute_if_it_is_not_passed(self):
-        client = Fixerio('test-access-key')
-
-        self.assertFalse(client.secure)
-
-    def test_sets_secure_attribute(self):
-        secure = True
-
-        client = Fixerio('test-access-key', secure=secure)
-
-        self.assertEqual(client.secure, secure)
