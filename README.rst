@@ -37,7 +37,7 @@ Get the latest foreign exchange reference rates in JSON format.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio()
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.latest()
     '''
      {u'base': u'EUR',
@@ -83,7 +83,7 @@ Get historical rates for any day since 1999.
     >>> from fixerio import Fixerio
 
     >>> today = datetime.date.today()
-    >>> fxrio = Fixerio()
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.historical_rates(today)
     '''
     {u'base': u'EUR',
@@ -128,7 +128,7 @@ currency by setting the ``base`` parameter in your request.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio(base='USD')
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY', base='USD')
     >>> fxrio.latest()
     '''
     {u'base': u'USD',
@@ -170,7 +170,7 @@ currency by setting the ``base`` parameter in your request.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio()
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.latest(base='USD')
     '''
     {u'base': u'USD',
@@ -214,7 +214,7 @@ Request specific exchange rates by setting the ``symbols`` parameter.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio(symbols=['USD', 'GBP'])
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY', symbols=['USD', 'GBP'])
     >>> fxrio.latest()
     '''
     {u'base': u'EUR',
@@ -226,7 +226,7 @@ Request specific exchange rates by setting the ``symbols`` parameter.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio()
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.latest(symbols=['USD', 'GBP'])
     '''
     {u'base': u'EUR',
@@ -240,7 +240,7 @@ An HTTPS endpoint is available.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio(secure=True)
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY', secure=True)
     >>> fxrio.latest()
     '''
     {u'base': u'EUR',
@@ -253,7 +253,7 @@ An HTTPS endpoint is available.
 
     >>> from fixerio import Fixerio
 
-    >>> fxrio = Fixerio()
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.latest(secure=True)
     '''
     {u'base': u'EUR',
