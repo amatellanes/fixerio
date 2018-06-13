@@ -3,8 +3,8 @@
 Release History
 ---------------
 
-1.0a1 (2018-06-12)
-~~~~~~~~~~~~~~~~~~
+1.0.0-alpha (2018-06-13)
+~~~~~~~~~~~~~~~~~~~~~~~~
 - Update to the `new Fixer endpoint <https://data.fixer.io/api/>`_.
 - Add Fixer API Access Key support.
 - Drop Changing base currency support. This option is not supported by Free Plan.
