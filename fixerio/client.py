@@ -58,7 +58,7 @@ class Fixerio(object):
 
             url = BASE_URL + LATEST_PATH
 
-            response = requests.get(url, params=payload)
+            response = requests.get(url, params=payload, timeout=10)
 
             response.raise_for_status()
 
@@ -88,7 +88,7 @@ class Fixerio(object):
 
             url = BASE_URL + date
 
-            response = requests.get(url, params=payload)
+            response = requests.get(url, params=payload, timeout=10)
 
             response.raise_for_status()
 
