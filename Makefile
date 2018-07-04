@@ -45,6 +45,7 @@ clean-pyc:
 clean-test:
 	rm -fr .cache/
 	rm -f .coverage
+	rm -fr .pytest_cache/
 	rm -fr htmlcov/
 
 .PHONY: coverage
