@@ -70,7 +70,7 @@ lint:
 
 .PHONY: test
 test:
-	nosetests
+	pytest
 
 .PHONY: register
 register:

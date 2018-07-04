@@ -11,5 +11,6 @@ docs/_build/
 
 # Unit test / coverage reports
 htmlcov/
+.pytest_cache/
 .tox/
 .coverage
