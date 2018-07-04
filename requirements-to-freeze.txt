@@ -3,6 +3,7 @@ coverage
 flake8
 responses
 pytest
+pytest-cov
 requests
 Sphinx
 tox
