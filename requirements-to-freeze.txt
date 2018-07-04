@@ -2,7 +2,7 @@ check-manifest
 coverage
 flake8
 responses
-nose
+pytest
 requests
 Sphinx
 tox

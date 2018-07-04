@@ -1,7 +1,7 @@
-### Python
+# Python
 *.pyc
 
-### Distribution / packaging
+# Distribution / packaging
 build/
 dist/
 *.egg-info/
@@ -9,7 +9,7 @@ dist/
 # Sphinx documentation
 docs/_build/
 
-### Unit test / coverage reports
+# Unit test / coverage reports
 htmlcov/
 .tox/
 .coverage
