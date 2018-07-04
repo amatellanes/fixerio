@@ -44,7 +44,6 @@ clean-pyc:
 .PHONY: clean-test
 clean-test:
 	rm -fr .cache/
-	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
 

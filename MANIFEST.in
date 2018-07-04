@@ -2,7 +2,6 @@ include *.rst
 include *.yaml
 include LICENSE
 include Makefile
-include tox.ini
 recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst
