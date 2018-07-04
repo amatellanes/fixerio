@@ -50,7 +50,10 @@ clean-test:
 
 .PHONY: coverage
 coverage:
-	nosetests --config=.noserc
+	pytest --cov-report html:htmlcov \
+		--cov-report term \
+		--cov=fixerio \
+		tests/
 
 .PHONY: freeze
 freeze:
