@@ -1,10 +1,11 @@
 include *.rst
-include *.yaml
+include *.txt
 include LICENSE
 include Makefile
+include .editorconfig
+include .flake8
 recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile
-recursive-include requirements *.txt
 recursive-include tests *.py
