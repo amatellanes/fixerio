@@ -81,15 +81,15 @@ register:
 
 .PHONY: build
 build:
-	python setup.py sdist
+	python setup.py sdist bdist_wheel
 
-.PHONY: wheel
-wheel:
-	python setup.py bdist_wheel
+.PHONY: upload-test
+upload-test:
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 .PHONY: upload
 upload:
-	python setup.py sdist bdist_wheel upload
+	twine upload dist/*
 
 .PHONY: manifest
 manifest:
