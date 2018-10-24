@@ -1,0 +1,26 @@
+---
+test_name: Fixer API
+
+stages:
+  - name: Latest Rates Endpoint
+
+    request:
+      url: http://data.fixer.io/api/latest?access_key={tavern.env_vars.FIXERIO_API_KEY}
+      method: GET
+
+    response:
+      status_code: 200
+      body:
+        success: true
+
+  - name: Historical Rates Endpoint
+
+    request:
+      url: http://data.fixer.io/api/2013-12-24?access_key={tavern.env_vars.FIXERIO_API_KEY}
+      method: GET
+
+    response:
+      status_code: 200
+      body:
+        success: true
+
