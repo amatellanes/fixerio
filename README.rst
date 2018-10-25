@@ -121,6 +121,27 @@ Get historical rates for any day since 1999.
       u'ZAR': 17.4504}}
     '''
 
+Get all available currencies.
+
+.. code:: python
+
+    >>> from fixerio import Fixerio
+
+    >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
+    >>> fxrio.symbols()
+    '''
+    {
+        'success': True,
+        'symbols': {
+            'AED': 'United Arab Emirates Dirham',
+            'AFN': 'Afghan Afghani',
+            'ALL': 'Albanian Lek',
+            'AMD': 'Armenian Dram',
+            [...]
+        }
+    }
+    '''
+
 Request specific exchange rates by setting the ``symbols`` parameter.
 
 .. code:: python

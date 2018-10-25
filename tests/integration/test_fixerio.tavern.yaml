@@ -2,6 +2,17 @@
 test_name: Fixer API
 
 stages:
+  - name: Supported Symbols Endpoint
+
+    request:
+      url: http://data.fixer.io/api/symbols?access_key={tavern.env_vars.FIXERIO_API_KEY}
+      method: GET
+
+    response:
+      status_code: 200
+      body:
+        success: true
+
   - name: Latest Rates Endpoint
 
     request:

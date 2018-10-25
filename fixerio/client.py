@@ -13,6 +13,7 @@ from .exceptions import FixerioException
 
 BASE_URL = 'http://data.fixer.io/api/'
 
+SYMBOLS_PATH = 'symbols'
 LATEST_PATH = 'latest'
 
 
@@ -27,9 +28,9 @@ class Fixerio(object):
         :type symbols: list or tuple
         """
         self.access_key = access_key
-        self.symbols = symbols
+        self._symbols = symbols
 
-    def _create_payload(self, symbols):
+    def _create_payload(self, symbols=None):
         """ Creates a payload with no none values.
 
         :param symbols: currency symbols to request specific exchange rates.
@@ -38,10 +39,31 @@ class Fixerio(object):
         :rtype: dict
         """
         payload = {'access_key': self.access_key}
+
         if symbols is not None:
             payload['symbols'] = ','.join(symbols)
 
         return payload
+
+    def symbols(self):
+        """ Get all available currencies.
+
+        :return: all supported currencies.
+        :rtype: dict
+        :raises FixerioException: if any error making a request.
+        """
+        try:
+            payload = self._create_payload()
+
+            url = BASE_URL + SYMBOLS_PATH
+
+            response = requests.get(url, params=payload)
+
+            response.raise_for_status()
+
+            return response.json()
+        except requests.exceptions.RequestException as ex:
+            raise FixerioException(str(ex))
 
     def latest(self, symbols=None):
         """ Get the latest foreign exchange reference rates.
@@ -53,7 +75,7 @@ class Fixerio(object):
         :raises FixerioException: if any error making a request.
         """
         try:
-            symbols = symbols or self.symbols
+            symbols = symbols or self._symbols
             payload = self._create_payload(symbols)
 
             url = BASE_URL + LATEST_PATH
@@ -80,10 +102,9 @@ class Fixerio(object):
         """
         try:
             if isinstance(date, datetime.date):
-                # Convert date to ISO 8601 format.
                 date = date.isoformat()
 
-            symbols = symbols or self.symbols
+            symbols = symbols or self._symbols
             payload = self._create_payload(symbols)
 
             url = BASE_URL + date

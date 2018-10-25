@@ -20,11 +20,11 @@ class FixerioInitTestCase(unittest.TestCase):
     def test_sets_none_symbols_attribute_if_it_is_not_passed(self):
         client = Fixerio('test-access-key')
 
-        self.assertIsNone(client.symbols)
+        self.assertIsNone(client._symbols)
 
     def test_sets_symbols_attribute(self):
         symbols = ['USD', 'GBP']
 
         client = Fixerio('test-access-key', symbols=symbols)
 
-        self.assertEqual(client.symbols, symbols)
+        self.assertEqual(client._symbols, symbols)
