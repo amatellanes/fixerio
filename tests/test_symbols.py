@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import json
 import unittest
 
 try:
@@ -27,18 +26,9 @@ class FixerioGetSymbolsTestCase(unittest.TestCase):
 
     @responses.activate
     def test_returns_symbols(self):
-        expected_response = {
-            "symbols": {
-                "AED": "United Arab Emirates Dirham",
-                "AFN": "Afghan Afghani",
-                "ALL": "Albanian Lek",
-                "AMD": "Armenian Dram"
-            }
-        }
-        responses.add(responses.GET,
-                      self.url,
-                      body=json.dumps(expected_response),
-                      content_type='application/json')
+        expected_response = {'symbols': {'AED': 'United Arab Emirates Dirham',
+                                         'AFN': 'Afghan Afghani'}}
+        responses.add(responses.GET, self.url, json=expected_response)
 
         client = Fixerio(self.access_key)
         response = client.symbols()
@@ -51,11 +41,8 @@ class FixerioGetSymbolsTestCase(unittest.TestCase):
 
     @responses.activate
     def test_raises_exception_if_bad_request(self):
-        responses.add(responses.GET,
-                      self.url,
-                      body="{'success': false}",
-                      status=400,
-                      content_type='text/json')
+        responses.add(responses.GET, self.url, json={'success': False},
+                      status=400)
 
         with self.assertRaises(FixerioException)as ex:
             client = Fixerio(self.access_key)

@@ -21,45 +21,47 @@ BASE_URL = 'http://data.fixer.io/api'
 class FixerioHistoricalRatesTestCase(unittest.TestCase):
     def setUp(self):
         self.access_key = 'test-access-key'
+
         self.date = date(2000, 1, 3)
+
         self.path = '/{0}'.format(self.date.isoformat())
         query = urlencode({'access_key': self.access_key})
         self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
-    def test_returns_historical_rates(self):
-        expected_response = {'base': 'EUR',
-                             'date': '2000-01-03',
+    def test_returns_historical_rates_using_date_string(self):
+        expected_response = {'base': 'EUR', 'date': '2000-01-03',
                              'rates': {'GBP': 0.6246}}
-        responses.add(responses.GET,
-                      self.url,
-                      json=expected_response,
-                      content_type='application/json')
-        client = Fixerio(self.access_key)
-        response = client.historical_rates(date=self.date.isoformat())
+        responses.add(responses.GET, self.url, json=expected_response)
 
+        client = Fixerio(self.access_key)
+
+        response = client.historical_rates(date=self.date.isoformat())
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         self.assertEqual(request.url, self.url)
         self.assertIsNone(request.body)
 
-        client = Fixerio(self.access_key)
-        response = client.historical_rates(date=self.date)
+    @responses.activate
+    def test_returns_historical_rates_using_date_object(self):
+        expected_response = {'base': 'EUR', 'date': '2000-01-03',
+                             'rates': {'GBP': 0.6246}}
+        responses.add(responses.GET, self.url, json=expected_response)
 
+        client = Fixerio(self.access_key)
+
+        response = client.historical_rates(date=self.date)
         self.assertDictEqual(response, expected_response)
-        request = responses.calls[1].request
+        request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         self.assertEqual(request.url, self.url)
         self.assertIsNone(request.body)
 
     @responses.activate
     def test_raises_exception_if_bad_request(self):
-        responses.add(responses.GET,
-                      self.url,
-                      json={'success': False},
-                      status=400,
-                      content_type='application/json')
+        responses.add(responses.GET, self.url, json={'success': False},
+                      status=400)
 
         with self.assertRaises(FixerioException)as ex:
             client = Fixerio(self.access_key)
@@ -84,13 +86,9 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
 
     @responses.activate
     def test_returns_historical_rates_for_symbols_passed_in_constructor(self):
-        expected_response = {"base": "EUR",
-                             "date": "2000-01-03",
-                             "rates": {"GBP": 0.6246, "USD": 1.009}}
-        responses.add(responses.GET,
-                      self.url,
-                      json=expected_response,
-                      content_type='application/json')
+        expected_response = {'base': 'EUR', 'date': '2000-01-03',
+                             'rates': {'GBP': 0.6246, 'USD': 1.009}}
+        responses.add(responses.GET, self.url, json=expected_response)
 
         client = Fixerio(self.access_key, symbols=self.symbols)
         response = client.historical_rates(date=self.date)
@@ -98,9 +96,10 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(self.symbols)
-        params = urlencode(
-            {'access_key': self.access_key, 'symbols': symbols_str})
+        params = urlencode({
+            'access_key': self.access_key,
+            'symbols': ','.join(self.symbols)
+        })
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -108,13 +107,9 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
 
     @responses.activate
     def test_returns_historical_rates_for_symbols_passed_in_method(self):
-        expected_response = {"base": "EUR",
-                             "date": "2000-01-03",
-                             "rates": {"GBP": 0.6246, "USD": 1.009}}
-        responses.add(responses.GET,
-                      self.url,
-                      json=expected_response,
-                      content_type='application/json')
+        expected_response = {'base': 'EUR', 'date': '2000-01-03',
+                             'rates': {'GBP': 0.6246, 'USD': 1.009}}
+        responses.add(responses.GET, self.url, json=expected_response)
 
         client = Fixerio(self.access_key)
         response = client.historical_rates(date=self.date,
@@ -124,8 +119,10 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         symbols_str = ','.join(self.symbols)
-        params = urlencode(
-            {'access_key': self.access_key, 'symbols': symbols_str})
+        params = urlencode({
+            'access_key': self.access_key,
+            'symbols': symbols_str
+        })
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
@@ -134,13 +131,9 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
     @responses.activate
     def test_returns_historical_rates_for_symbols_passed_if_both(self):
         other_symbols = ['JPY', 'EUR']
-        expected_response = {"base": "EUR",
-                             "date": "2000-01-03",
-                             "rates": {"GBP": 0.6246, "USD": 1.009}}
-        responses.add(responses.GET,
-                      self.url,
-                      json=expected_response,
-                      content_type='application/json')
+        expected_response = {'base': 'EUR', 'date': '2000-01-03',
+                             'rates': {'GBP': 0.6246, 'USD': 1.009}}
+        responses.add(responses.GET, self.url, json=expected_response)
 
         client = Fixerio(self.access_key, symbols=other_symbols)
         response = client.historical_rates(date=self.date,
@@ -150,8 +143,10 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
         symbols_str = ','.join(self.symbols)
-        params = urlencode(
-            {'access_key': self.access_key, 'symbols': symbols_str})
+        params = urlencode({
+            'access_key': self.access_key,
+            'symbols': symbols_str
+        })
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
