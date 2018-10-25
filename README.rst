@@ -4,10 +4,8 @@ A Python client for `Fixer.io`_
 |Build Status| |Coverage Status| |Supports Wheel format|
 |Latest PyPI version| |Documentation Status| |Requirements Status|
 
-`Fixer.io`_ is a free JSON API for current and historical foreign
-exchange rates published by the European Central Bank.
-
-The rates are updated daily around 3PM CET.
+`Fixer.io`_ is a simple and lightweight JSON API for current and
+historical foreign exchange (forex) rates.
 
 Installation
 ------------
@@ -31,7 +29,8 @@ https://github.com/amatellanes/fixerio.
 Usage
 -----
 
-Get the latest foreign exchange reference rates in JSON format.
+Returns real-time exchange rate data for all available or a specific set of
+currencies.
 
 .. code:: python
 
@@ -40,42 +39,24 @@ Get the latest foreign exchange reference rates in JSON format.
     >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.latest()
     '''
-     {u'base': u'EUR',
-     u'date': u'2016-05-27',
-     u'rates': {u'AUD': 1.5483,
-      u'BGN': 1.9558,
-      u'BRL': 4.031,
-      u'CAD': 1.456,
-      u'CHF': 1.1068,
-      u'CNY': 7.3281,
-      u'CZK': 27.028,
-      u'DKK': 7.4367,
-      u'GBP': 0.76245,
-      u'HKD': 8.6735,
-      u'HRK': 7.4905,
-      u'HUF': 314.21,
-      u'IDR': 15157.25,
-      u'ILS': 4.2938,
-      u'INR': 74.867,
-      u'JPY': 122.46,
-      u'KRW': 1316.98,
-      u'MXN': 20.6611,
-      u'MYR': 4.5554,
-      u'NOK': 9.282,
-      u'NZD': 1.6586,
-      u'PHP': 52.096,
-      u'PLN': 4.3912,
-      u'RON': 4.5034,
-      u'RUB': 73.7516,
-      u'SEK': 9.2673,
-      u'SGD': 1.536,
-      u'THB': 39.851,
-      u'TRY': 3.2928,
-      u'USD': 1.1168,
-      u'ZAR': 17.4504}}
+     {
+        'success': True,
+        'timestamp': 1540479545,
+        'base': 'EUR',
+        'date': '2018-10-25',
+        'rates':
+        {
+            'AUD': 1.5483,
+            'BGN': 1.9558,
+            'BRL': 4.031,
+            'CAD': 1.456,
+            [...]
+        }
+    }
     '''
 
-Get historical rates for any day since 1999.
+Returns historical exchange rate data for all available or a specific set of
+currencies.
 
 .. code:: python
 
@@ -86,42 +67,23 @@ Get historical rates for any day since 1999.
     >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.historical_rates(today)
     '''
-    {u'base': u'EUR',
-     u'date': u'2016-05-27',
-     u'rates': {u'AUD': 1.5483,
-      u'BGN': 1.9558,
-      u'BRL': 4.031,
-      u'CAD': 1.456,
-      u'CHF': 1.1068,
-      u'CNY': 7.3281,
-      u'CZK': 27.028,
-      u'DKK': 7.4367,
-      u'GBP': 0.76245,
-      u'HKD': 8.6735,
-      u'HRK': 7.4905,
-      u'HUF': 314.21,
-      u'IDR': 15157.25,
-      u'ILS': 4.2938,
-      u'INR': 74.867,
-      u'JPY': 122.46,
-      u'KRW': 1316.98,
-      u'MXN': 20.6611,
-      u'MYR': 4.5554,
-      u'NOK': 9.282,
-      u'NZD': 1.6586,
-      u'PHP': 52.096,
-      u'PLN': 4.3912,
-      u'RON': 4.5034,
-      u'RUB': 73.7516,
-      u'SEK': 9.2673,
-      u'SGD': 1.536,
-      u'THB': 39.851,
-      u'TRY': 3.2928,
-      u'USD': 1.1168,
-      u'ZAR': 17.4504}}
+    {
+        'success': True,
+        'timestamp': 1540480626,
+        'historical': True,
+        'base': 'EUR',
+        'date': '2018-10-25',
+        'rates': {
+            'AUD': 1.5483,
+            'BGN': 1.9558,
+            'BRL': 4.031,
+            'CAD': 1.456,
+            [...]
+        }
+    }
     '''
 
-Get all available currencies.
+Returns all available currencies.
 
 .. code:: python
 
@@ -151,9 +113,16 @@ Request specific exchange rates by setting the ``symbols`` parameter.
     >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY', symbols=['USD', 'GBP'])
     >>> fxrio.latest()
     '''
-    {u'base': u'EUR',
-     u'date': u'2016-05-27',
-     u'rates': {u'GBP': 0.76245, u'USD': 1.1168}}
+    {
+        'success': True,
+        'timestamp': 1540479545,
+        'base': 'EUR',
+        'date': '2018-10-25',
+        'rates': {
+            'GBP': 0.76245,
+            'USD': 1.1168
+        }
+    }
     '''
 
 .. code:: python
@@ -163,15 +132,22 @@ Request specific exchange rates by setting the ``symbols`` parameter.
     >>> fxrio = Fixerio(access_key='YOUR ACCESS KEY')
     >>> fxrio.latest(symbols=['USD', 'GBP'])
     '''
-    {u'base': u'EUR',
-     u'date': u'2016-05-27',
-     u'rates': {u'GBP': 0.76245, u'USD': 1.1168}}
+    {
+        'success': True,
+        'timestamp': 1540479545,
+        'base': 'EUR',
+        'date': '2018-10-25',
+        'rates': {
+            'GBP': 0.76245,
+            'USD': 1.1168
+        }
+    }
     '''
 
 All exceptions that ``fixerio`` explicitly raises are
 ``fixerio.exceptions.FixerioException``.
 
-.. _Fixer.io: http://fixer.io/
+.. _Fixer.io: https://fixer.io/
 
 .. |Build Status| image:: https://travis-ci.org/amatellanes/fixerio.svg?branch=master
     :target: https://travis-ci.org/amatellanes/fixerio
