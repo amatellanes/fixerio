@@ -31,7 +31,7 @@ class FixerioLatestTestCase(unittest.TestCase):
                              'rates': {'GBP': 0.78025}}
         responses.add(responses.GET,
                       self.url,
-                      body=json.dumps(expected_response),
+                      json=expected_response,
                       content_type='application/json')
 
         client = Fixerio(self.access_key)
@@ -47,7 +47,7 @@ class FixerioLatestTestCase(unittest.TestCase):
     def test_raises_exception_if_bad_request(self):
         responses.add(responses.GET,
                       self.url,
-                      body="{'success': false}",
+                      json={'success': False},
                       status=400,
                       content_type='text/json')
 
@@ -64,12 +64,15 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
     def setUp(self):
         self.access_key = 'test-access-key'
         self.path = 'latest'
-        query = urlencode({'access_key': self.access_key})
+        self.symbols = ['USD', 'GBP']
+        query = urlencode({
+            'access_key': self.access_key,
+            'symbols': ','.join(self.symbols)
+        })
         self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
-        symbols = ['USD', 'GBP']
         expected_response = {
             "base": "EUR",
             "date": "2016-05-19",
@@ -80,13 +83,13 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
                       body=json.dumps(expected_response),
                       content_type='application/json')
 
-        client = Fixerio(self.access_key, symbols=symbols)
+        client = Fixerio(self.access_key, symbols=self.symbols)
         response = client.latest()
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
+        symbols_str = ','.join(self.symbols)
         params = urlencode(
             {'access_key': self.access_key, 'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
@@ -96,7 +99,6 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_method(self):
-        symbols = ['USD', 'GBP']
         expected_response = {
             "base": "EUR",
             "date": "2016-05-19",
@@ -108,12 +110,12 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
                       content_type='application/json')
 
         client = Fixerio(self.access_key)
-        response = client.latest(symbols=symbols)
+        response = client.latest(symbols=self.symbols)
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
+        symbols_str = ','.join(self.symbols)
         params = urlencode(
             {'access_key': self.access_key, 'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
@@ -123,7 +125,6 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_method_if_both(self):
-        symbols = ['USD', 'GBP']
         other_symbols = ['JPY', 'EUR']
         expected_response = {
             "base": "EUR",
@@ -136,12 +137,12 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
                       content_type='application/json')
 
         client = Fixerio(self.access_key, symbols=other_symbols)
-        response = client.latest(symbols=symbols)
+        response = client.latest(symbols=self.symbols)
 
         self.assertDictEqual(response, expected_response)
         request = responses.calls[0].request
         self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
+        symbols_str = ','.join(self.symbols)
         params = urlencode(
             {'access_key': self.access_key, 'symbols': symbols_str})
         expected_path = '{url}?{params}'.format(url=self.path, params=params)
