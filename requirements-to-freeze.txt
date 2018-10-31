@@ -5,6 +5,6 @@ responses
 pathlib
 pytest
 pytest-cov
-requests
+requests>=2.20.0
 Sphinx
 tavern

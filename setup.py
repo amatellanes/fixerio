@@ -17,7 +17,7 @@ with open('README.rst') as f:
 with open('CHANGELOG.rst') as f:
     changelog = f.read()
 
-requirements = ['requests>=2.0']
+requirements = ['requests>=2.20.0']
 
 setup(
     name='fixerio',
