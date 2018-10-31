@@ -2,6 +2,7 @@ check-manifest
 coverage
 flake8
 responses
+pathlib
 pytest
 pytest-cov
 requests
