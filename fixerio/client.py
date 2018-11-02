@@ -25,10 +25,10 @@ class Fixerio(object):
         :param access_key: your API Key.
         :type access_key: str or unicode
         :param symbols: (optional) currency symbols to request specific
-        exchange rates.
+            exchange rates.
         :type symbols: list or tuple
         :param timeout: (optional) How long to wait for the server to send
-        data before giving up.
+            data before giving up.
         :type timeout: float or tuple
         """
         self.access_key = access_key
@@ -39,7 +39,7 @@ class Fixerio(object):
         """ Creates a payload with no none values.
 
         :param symbols: (optional) currency symbols to request specific
-        exchange rates.
+            exchange rates.
         :type symbols: list or tuple
         :return: a payload.
         :rtype: dict
@@ -55,7 +55,7 @@ class Fixerio(object):
         """ Get all available currencies.
 
         :param timeout: (optional) How long to wait for the server to send
-        data before giving up.
+            data before giving up.
         :type timeout: float or tuple
         :return: all supported currencies.
         :rtype: dict
@@ -80,10 +80,10 @@ class Fixerio(object):
         """ Get the latest foreign exchange reference rates.
 
         :param symbols: (optional) currency symbols to request specific
-        exchange rates.
+            exchange rates.
         :type symbols: list or tuple
         :param timeout: (optional) How long to wait for the server to send
-        data before giving up.
+            data before giving up.
         :type timeout: float or tuple
         :return: the latest foreign exchange reference rates.
         :rtype: dict
@@ -112,10 +112,10 @@ class Fixerio(object):
         :param date: a date
         :type date: date or str
         :param symbols: (optional) currency symbols to request specific
-        exchange rates.
+            exchange rates.
         :type symbols: list or tuple
         :param timeout: (optional) How long to wait for the server to send
-        data before giving up.
+            data before giving up.
         :type timeout: float or tuple
         :return: the historical rates for any day since `date`.
         :rtype: dict
