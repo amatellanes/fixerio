@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import unittest
 from datetime import date
+from unittest import mock
 
 try:
     from urllib.parse import urljoin  # noqa: F401
@@ -151,3 +152,42 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
+
+
+class FixerioHistoricalRatesTimeoutTestCase(unittest.TestCase):
+    def setUp(self):
+        self.access_key = 'test-access-key'
+        self.date = date(2000, 1, 3)
+        self.path = '/{0}'.format(self.date.isoformat())
+        self.timeout = 0.001
+        query = urlencode({
+            'access_key': self.access_key,
+        })
+        self.url = BASE_URL + self.path + '?' + query
+
+    @mock.patch('requests.get')
+    def test_returns_historical_rates_for_timeout_passed_in_constructor(self,
+                                                                        mock_get):
+        client = Fixerio(self.access_key, timeout=self.timeout)
+        client.historical_rates(date=self.date)
+
+        self.assertEqual(mock_get.call_count, 1)
+        self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
+
+    @mock.patch('requests.get')
+    def test_returns_historical_rates_for_symbols_passed_in_method(self,
+                                                                   mock_get):
+        client = Fixerio(self.access_key)
+        client.historical_rates(date=self.date, timeout=self.timeout)
+
+        self.assertEqual(mock_get.call_count, 1)
+        self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
+
+    @mock.patch('requests.get')
+    def test_returns_historical_rates_for_symbols_passed_if_both(self,
+                                                                 mock_get):
+        client = Fixerio(self.access_key, timeout=not self.timeout)
+        client.historical_rates(date=self.date, timeout=self.timeout)
+
+        self.assertEqual(mock_get.call_count, 1)
+        self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)

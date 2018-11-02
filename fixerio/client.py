@@ -95,7 +95,7 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def historical_rates(self, date, symbols=None):
+    def historical_rates(self, date, symbols=None, timeout=None):
         """
         Get historical rates for any day since `date`.
 
@@ -104,6 +104,9 @@ class Fixerio(object):
         :param symbols: (optional) currency symbols to request specific
         exchange rates.
         :type symbols: list or tuple
+        :param timeout: (optional) How long to wait for the server to send
+        data before giving up.
+        :type timeout: float or tuple
         :return: the historical rates for any day since `date`.
         :rtype: dict
         :raises FixerioException: if any error making a request.
@@ -115,9 +118,11 @@ class Fixerio(object):
             symbols = symbols or self._symbols
             payload = self._create_payload(symbols)
 
+            timeout = timeout or self.timeout
+
             url = BASE_URL + date
 
-            response = requests.get(url, params=payload)
+            response = requests.get(url, params=payload, timeout=timeout)
 
             response.raise_for_status()
 
