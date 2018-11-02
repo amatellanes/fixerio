@@ -2,12 +2,13 @@ from __future__ import unicode_literals
 
 import unittest
 from datetime import date
-from unittest import mock
 
 try:
+    from unittest import mock
     from urllib.parse import urljoin  # noqa: F401
     from urllib.parse import urlencode  # noqa: F401
 except ImportError:  # For Python 2
+    import mock
     from urlparse import urljoin  # noqa: F401
     from urllib import urlencode  # noqa: F401
 
@@ -107,7 +108,7 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         self.assertIsNone(request.body)
 
     @responses.activate
-    def test_returns_historical_rates_for_symbols_passed_in_method(self):
+    def test_returns_historical_rates_for_symbols_in_method(self):
         expected_response = {'base': 'EUR', 'date': '2000-01-03',
                              'rates': {'GBP': 0.6246, 'USD': 1.009}}
         responses.add(responses.GET, self.url, json=expected_response)
@@ -175,8 +176,7 @@ class FixerioHistoricalRatesTimeoutTestCase(unittest.TestCase):
         self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
 
     @mock.patch('requests.get')
-    def test_returns_historical_rates_for_symbols_passed_in_method(self,
-                                                                   mock_get):
+    def test_returns_historical_rates_for_timeout_in_method(self, mock_get):
         client = Fixerio(self.access_key)
         client.historical_rates(date=self.date, timeout=self.timeout)
 
@@ -184,7 +184,7 @@ class FixerioHistoricalRatesTimeoutTestCase(unittest.TestCase):
         self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
 
     @mock.patch('requests.get')
-    def test_returns_historical_rates_for_symbols_passed_if_both(self,
+    def test_returns_historical_rates_for_timeout_passed_if_both(self,
                                                                  mock_get):
         client = Fixerio(self.access_key, timeout=not self.timeout)
         client.historical_rates(date=self.date, timeout=self.timeout)

@@ -51,9 +51,12 @@ class Fixerio(object):
 
         return payload
 
-    def symbols(self):
+    def symbols(self, timeout=None):
         """ Get all available currencies.
 
+        :param timeout: (optional) How long to wait for the server to send
+        data before giving up.
+        :type timeout: float or tuple
         :return: all supported currencies.
         :rtype: dict
         :raises FixerioException: if any error making a request.
@@ -61,9 +64,11 @@ class Fixerio(object):
         try:
             payload = self._create_payload()
 
+            timeout = timeout or self.timeout
+
             url = BASE_URL + SYMBOLS_PATH
 
-            response = requests.get(url, params=payload)
+            response = requests.get(url, params=payload, timeout=timeout)
 
             response.raise_for_status()
 

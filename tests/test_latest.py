@@ -1,12 +1,13 @@
 from __future__ import unicode_literals
 
 import unittest
-from unittest import mock
 
 try:
+    from unittest import mock
     from urllib.parse import urljoin  # noqa: F401
     from urllib.parse import urlencode  # noqa: F401
 except ImportError:  # For Python 2
+    import mock
     from urlparse import urljoin  # noqa: F401
     from urllib import urlencode  # noqa: F401
 
@@ -88,7 +89,7 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         self.assertIsNone(request.body)
 
     @responses.activate
-    def test_returns_latest_rates_for_symbols_passed_in_method(self):
+    def test_returns_latest_rates_for_symbols_in_method(self):
         expected_response = {'base': 'EUR', 'date': '2016-05-19',
                              'rates': {'GBP': 0.76585, 'USD': 1.1197}}
         responses.add(responses.GET, self.url, json=expected_response)
@@ -110,7 +111,7 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         self.assertIsNone(request.body)
 
     @responses.activate
-    def test_returns_latest_rates_for_symbols_passed_in_method_if_both(self):
+    def test_returns_latest_rates_for_symbols_in_method_if_both(self):
         other_symbols = ['JPY', 'EUR']
         expected_response = {'base': 'EUR', 'date': '2016-05-19',
                              'rates': {'GBP': 0.76585, 'USD': 1.1197}}
@@ -152,7 +153,7 @@ class FixerioLatestTimeoutTestCase(unittest.TestCase):
         self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
 
     @mock.patch('requests.get')
-    def test_returns_latest_rates_for_symbols_passed_in_method(self, mock_get):
+    def test_returns_latest_rates_for_timeout_in_method(self, mock_get):
         client = Fixerio(self.access_key)
         client.latest(timeout=self.timeout)
 
@@ -160,7 +161,7 @@ class FixerioLatestTimeoutTestCase(unittest.TestCase):
         self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
 
     @mock.patch('requests.get')
-    def test_returns_latest_rates_for_symbols_passed_if_both(self, mock_get):
+    def test_returns_latest_rates_for_timeout_passed_if_both(self, mock_get):
         client = Fixerio(self.access_key, timeout=self.timeout)
         client.latest(timeout=self.timeout)
 

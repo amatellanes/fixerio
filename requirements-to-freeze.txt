@@ -1,10 +1,11 @@
 check-manifest
 coverage
 flake8
-responses
+mock
 pathlib
 pytest
 pytest-cov
 requests>=2.20.0
+responses
 Sphinx
 tavern
