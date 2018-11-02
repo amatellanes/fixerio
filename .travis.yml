@@ -1,21 +1,21 @@
 language: python
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.5-dev"
-  - "3.6"
-  - "3.6-dev"
-  - "3.7-dev"
-  - "nightly"
-  - "pypy"
-  - "pypy3.5"
+- "2.7"
+- "3.4"
+- "3.5"
+- "3.5-dev"
+- "3.6"
+- "3.6-dev"
+- "3.7-dev"
+- "nightly"
+- "pypy"
+- "pypy3.5"
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls
+- pip install -r requirements.txt
+- pip install coveralls
 script:
-  - make manifest
-  - make lint
-  - make coverage
+- make manifest
+- make lint
+- make coverage
 after_success:
-  - coveralls
+- coveralls
