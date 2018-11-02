@@ -28,3 +28,15 @@ class FixerioInitTestCase(unittest.TestCase):
         client = Fixerio('test-access-key', symbols=symbols)
 
         self.assertEqual(client._symbols, symbols)
+
+    def test_sets_none_timeout_attribute_if_it_is_not_passed(self):
+        client = Fixerio('test-access-key')
+
+        self.assertIsNone(client.timeout)
+
+    def test_sets_timeout_attribute(self):
+        timeout = 0.001
+
+        client = Fixerio('test-access-key', timeout=timeout)
+
+        self.assertEqual(client.timeout, timeout)

@@ -20,20 +20,26 @@ LATEST_PATH = 'latest'
 class Fixerio(object):
     """ A client for Fixer.io. """
 
-    def __init__(self, access_key, symbols=None):
+    def __init__(self, access_key, symbols=None, timeout=None):
         """
         :param access_key: your API Key.
         :type access_key: str or unicode
-        :param symbols: currency symbols to request specific exchange rates.
+        :param symbols: (optional) currency symbols to request specific
+        exchange rates.
         :type symbols: list or tuple
+        :param timeout: (optional) How long to wait for the server to send
+        data before giving up.
+        :type timeout: float or tuple
         """
         self.access_key = access_key
         self._symbols = symbols
+        self.timeout = timeout
 
     def _create_payload(self, symbols=None):
         """ Creates a payload with no none values.
 
-        :param symbols: currency symbols to request specific exchange rates.
+        :param symbols: (optional) currency symbols to request specific
+        exchange rates.
         :type symbols: list or tuple
         :return: a payload.
         :rtype: dict
@@ -68,7 +74,8 @@ class Fixerio(object):
     def latest(self, symbols=None):
         """ Get the latest foreign exchange reference rates.
 
-        :param symbols: currency symbols to request specific exchange rates.
+        :param symbols: (optional) currency symbols to request specific
+        exchange rates.
         :type symbols: list or tuple
         :return: the latest foreign exchange reference rates.
         :rtype: dict
@@ -94,7 +101,8 @@ class Fixerio(object):
 
         :param date: a date
         :type date: date or str
-        :param symbols: currency symbols to request specific exchange rates.
+        :param symbols: (optional) currency symbols to request specific
+        exchange rates.
         :type symbols: list or tuple
         :return: the historical rates for any day since `date`.
         :rtype: dict
