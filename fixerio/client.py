@@ -71,12 +71,15 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def latest(self, symbols=None):
+    def latest(self, symbols=None, timeout=None):
         """ Get the latest foreign exchange reference rates.
 
         :param symbols: (optional) currency symbols to request specific
         exchange rates.
         :type symbols: list or tuple
+        :param timeout: (optional) How long to wait for the server to send
+        data before giving up.
+        :type timeout: float or tuple
         :return: the latest foreign exchange reference rates.
         :rtype: dict
         :raises FixerioException: if any error making a request.
@@ -85,9 +88,11 @@ class Fixerio(object):
             symbols = symbols or self._symbols
             payload = self._create_payload(symbols)
 
+            timeout = timeout or self.timeout
+
             url = BASE_URL + LATEST_PATH
 
-            response = requests.get(url, params=payload)
+            response = requests.get(url, params=payload, timeout=timeout)
 
             response.raise_for_status()
 

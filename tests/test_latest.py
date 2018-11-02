@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import unittest
+from unittest import mock
 
 try:
     from urllib.parse import urljoin  # noqa: F401
@@ -65,7 +66,7 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
-    def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
+    def test_returns_latest_rates_for_symbols_in_constructor(self):
         expected_response = {'base': 'EUR', 'date': '2016-05-19',
                              'rates': {'GBP': 0.76585, 'USD': 1.1197}}
         responses.add(responses.GET, self.url, json=expected_response)
@@ -130,3 +131,38 @@ class FixerioLatestSymbolsTestCase(unittest.TestCase):
         expected_url = BASE_URL + expected_path
         self.assertEqual(request.url, expected_url)
         self.assertIsNone(request.body)
+
+
+class FixerioLatestTimeoutTestCase(unittest.TestCase):
+    def setUp(self):
+        self.access_key = 'test-access-key'
+        self.path = 'latest'
+        self.timeout = 0.001
+        query = urlencode({
+            'access_key': self.access_key,
+        })
+        self.url = BASE_URL + self.path + '?' + query
+
+    @mock.patch('requests.get')
+    def test_returns_latest_rates_for_timeout_in_constructor(self, mock_get):
+        client = Fixerio(self.access_key, timeout=self.timeout)
+        client.latest()
+
+        self.assertEqual(mock_get.call_count, 1)
+        self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
+
+    @mock.patch('requests.get')
+    def test_returns_latest_rates_for_symbols_passed_in_method(self, mock_get):
+        client = Fixerio(self.access_key)
+        client.latest(timeout=self.timeout)
+
+        self.assertEqual(mock_get.call_count, 1)
+        self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)
+
+    @mock.patch('requests.get')
+    def test_returns_latest_rates_for_symbols_passed_if_both(self, mock_get):
+        client = Fixerio(self.access_key, timeout=self.timeout)
+        client.latest(timeout=self.timeout)
+
+        self.assertEqual(mock_get.call_count, 1)
+        self.assertEqual(mock_get.call_args[1]['timeout'], self.timeout)

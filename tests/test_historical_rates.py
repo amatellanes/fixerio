@@ -86,7 +86,7 @@ class FixerioHistoricalRatesSymbolsTestCase(unittest.TestCase):
         self.url = BASE_URL + self.path + '?' + query
 
     @responses.activate
-    def test_returns_historical_rates_for_symbols_passed_in_constructor(self):
+    def test_returns_historical_rates_for_symbols_in_constructor(self):
         expected_response = {'base': 'EUR', 'date': '2000-01-03',
                              'rates': {'GBP': 0.6246, 'USD': 1.009}}
         responses.add(responses.GET, self.url, json=expected_response)
@@ -166,8 +166,8 @@ class FixerioHistoricalRatesTimeoutTestCase(unittest.TestCase):
         self.url = BASE_URL + self.path + '?' + query
 
     @mock.patch('requests.get')
-    def test_returns_historical_rates_for_timeout_passed_in_constructor(self,
-                                                                        mock_get):
+    def test_returns_historical_rates_for_timeout_in_constructor(self,
+                                                                 mock_get):
         client = Fixerio(self.access_key, timeout=self.timeout)
         client.historical_rates(date=self.date)
 
