@@ -29,7 +29,7 @@ class Fixerio(object):
         self.access_key = access_key
         self.symbols = symbols
 
-    def _create_payload(self, symbols):
+    def _create_payload(self, symbols, base):
         """ Creates a payload with no none values.
 
         :param symbols: currency symbols to request specific exchange rates.
@@ -38,12 +38,16 @@ class Fixerio(object):
         :rtype: dict
         """
         payload = {'access_key': self.access_key}
+
+        if base is not None:
+            payload['base'] = base
+
         if symbols is not None:
             payload['symbols'] = ','.join(symbols)
 
         return payload
 
-    def latest(self, symbols=None):
+    def latest(self, symbols=None, base=None):
         """ Get the latest foreign exchange reference rates.
 
         :param symbols: currency symbols to request specific exchange rates.
@@ -54,7 +58,7 @@ class Fixerio(object):
         """
         try:
             symbols = symbols or self.symbols
-            payload = self._create_payload(symbols)
+            payload = self._create_payload(symbols, base)
 
             url = BASE_URL + LATEST_PATH
 
