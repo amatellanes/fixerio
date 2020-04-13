@@ -45,7 +45,7 @@ class Fixerio(object):
 
         return payload
 
-    def latest(self, base=None, symbols=None):
+    def latest(self, symbols=None, base=None):
         """ Get the latest foreign exchange reference rates.
 
         :param symbols: currency symbols to request specific exchange rates.
@@ -68,7 +68,7 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def historical_rates(self, date, base=None, symbols=None):
+    def historical_rates(self, date, symbols=None, base=None):
         """
         Get historical rates for any day since `date`.
 
