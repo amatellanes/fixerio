@@ -29,7 +29,7 @@ class Fixerio(object):
         self.access_key = access_key
         self.symbols = symbols
 
-    def _create_payload(self, symbols):
+    def _create_payload(self, symbols, base=None):
         """ Creates a payload with no none values.
 
         :param symbols: currency symbols to request specific exchange rates.
@@ -40,10 +40,12 @@ class Fixerio(object):
         payload = {'access_key': self.access_key}
         if symbols is not None:
             payload['symbols'] = ','.join(symbols)
+        if base is not None:
+            payload['base'] = base
 
         return payload
 
-    def latest(self, symbols=None):
+    def latest(self, base=None, symbols=None):
         """ Get the latest foreign exchange reference rates.
 
         :param symbols: currency symbols to request specific exchange rates.
@@ -54,7 +56,7 @@ class Fixerio(object):
         """
         try:
             symbols = symbols or self.symbols
-            payload = self._create_payload(symbols)
+            payload = self._create_payload(symbols, base)
 
             url = BASE_URL + LATEST_PATH
 
@@ -66,7 +68,7 @@ class Fixerio(object):
         except requests.exceptions.RequestException as ex:
             raise FixerioException(str(ex))
 
-    def historical_rates(self, date, symbols=None):
+    def historical_rates(self, date, base=None, symbols=None):
         """
         Get historical rates for any day since `date`.
 
@@ -84,7 +86,7 @@ class Fixerio(object):
                 date = date.isoformat()
 
             symbols = symbols or self.symbols
-            payload = self._create_payload(symbols)
+            payload = self._create_payload(symbols, base)
 
             url = BASE_URL + date
 
