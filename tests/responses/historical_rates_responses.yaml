@@ -1,0 +1,28 @@
+responses:
+- response:
+    auto_calculate_content_length: false
+    body: "{\n    \"success\": true,\n    \"timestamp\": 946943999,\n    \"historical\"\
+      : true,\n    \"base\": \"EUR\",\n    \"date\": \"2000-01-03\",\n    \"rates\"\
+      : {\n        \"GBP\": 0.627016\n    }\n}\n"
+    content_type: application/json
+    method: GET
+    status: 200
+    url: https://api.apilayer.com/fixer/2000-01-03?base=EUR&symbols=GBP
+- response:
+    auto_calculate_content_length: false
+    body: "{\n    \"success\": true,\n    \"timestamp\": 946943999,\n    \"historical\"\
+      : true,\n    \"base\": \"USD\",\n    \"date\": \"2000-01-03\",\n    \"rates\"\
+      : {\n        \"GBP\": 0.614647\n    }\n}\n"
+    content_type: application/json
+    method: GET
+    status: 200
+    url: https://api.apilayer.com/fixer/2000-01-03?base=USD&symbols=GBP
+- response:
+    auto_calculate_content_length: false
+    body: "{\n    \"success\": true,\n    \"timestamp\": 946943999,\n    \"historical\"\
+      : true,\n    \"base\": \"EUR\",\n    \"date\": \"2000-01-03\",\n    \"rates\"\
+      : {\n        \"USD\": 1.020124,\n        \"GBP\": 0.627016\n    }\n}\n"
+    content_type: application/json
+    method: GET
+    status: 200
+    url: https://api.apilayer.com/fixer/2000-01-03?base=EUR&symbols=USD,GBP

@@ -50,7 +50,7 @@ clean-test:
 
 .PHONY: coverage
 coverage:
-	nosetests --config=.noserc
+	pytest --cov=fixerio --cov-report html:cov_html --cov-report term-missing tests/
 
 .PHONY: freeze
 freeze:
@@ -70,7 +70,7 @@ lint:
 
 .PHONY: test
 test:
-	nosetests
+	pytest tests/
 
 .PHONY: register
 register:
