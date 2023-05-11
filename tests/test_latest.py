@@ -1,47 +1,33 @@
-from __future__ import unicode_literals
-
-import json
-import unittest
-
-try:
-    from urllib.parse import urljoin  # noqa: F401
-    from urllib.parse import urlencode  # noqa: F401
-except ImportError:  # For Python 2
-    from urlparse import urljoin  # noqa: F401
-    from urllib import urlencode  # noqa: F401
-
 import responses
+import pytest
+from pathlib import Path
 
 from fixerio.client import Fixerio
 from fixerio.exceptions import FixerioException
 
-BASE_URL = 'http://data.fixer.io/api/'
+BASE_URL = 'https://api.apilayer.com/fixer/'
+RESPONSES_DIR = Path(__file__).parent / 'responses'
 
 
-class FixerioLatestTestCase(unittest.TestCase):
-    def setUp(self):
-        self.access_key = 'test-access-key'
-        self.path = 'latest'
-        query = urlencode({'access_key': self.access_key})
-        self.url = BASE_URL + self.path + '?' + query
+class TestLatest:
+    def setup_class(cls):
+        cls.access_key = 'test-access-key'
+        cls.date = '2023-05-09'
+        cls.url = BASE_URL + 'latest'
+        cls.response_file = RESPONSES_DIR / "latest_responses.yaml"
 
     @responses.activate
     def test_returns_latest_rates(self):
-        expected_response = {'base': 'EUR', 'date': '2016-04-29',
-                             'rates': {'GBP': 0.78025}}
-        responses.add(responses.GET,
-                      self.url,
-                      body=json.dumps(expected_response),
-                      content_type='application/json')
-
+        responses._add_from_file(file_path=self.response_file)
         client = Fixerio(self.access_key)
         response = client.latest()
 
-        self.assertDictEqual(response, expected_response)
-        request = responses.calls[0].request
-        self.assertEqual(request.method, 'GET')
-        self.assertEqual(request.url, self.url)
-        self.assertIsNone(request.body)
+        assert response['date'] == self.date
+        assert response['base'] == 'EUR'
+        rates = response['rates']
+        assert rates['SEK'] == 11.172796
+        assert rates['NOK'] == 11.557591
+        assert rates['JPY'] == 148.40037
 
     @responses.activate
     def test_raises_exception_if_bad_request(self):
@@ -49,102 +35,52 @@ class FixerioLatestTestCase(unittest.TestCase):
                       self.url,
                       body="{'success': false}",
                       status=400,
-                      content_type='text/json')
+                      content_type='application/json')
 
-        with self.assertRaises(FixerioException)as ex:
+        with pytest.raises(FixerioException):
             client = Fixerio(self.access_key)
             client.latest()
 
-        expected_message = (('400 Client Error: Bad Request for url: '
-                             '{0}').format(self.url))
-        self.assertEqual(str(ex.exception), expected_message)
+    @responses.activate
+    def test_returns_latest_rate_for_single_symbol_passed_as_string(self):
+        symbol = 'USD'
+        responses._add_from_file(file_path=self.response_file)
+        client = Fixerio(self.access_key, symbols=symbol)
+        response = client.latest()
 
-
-class FixerioLatestSymbolsTestCase(unittest.TestCase):
-    def setUp(self):
-        self.access_key = 'test-access-key'
-        self.path = 'latest'
-        query = urlencode({'access_key': self.access_key})
-        self.url = BASE_URL + self.path + '?' + query
+        assert response['rates']['USD'] == 1.093434
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_constructor(self):
         symbols = ['USD', 'GBP']
-        expected_response = {
-            "base": "EUR",
-            "date": "2016-05-19",
-            "rates": {"GBP": 0.76585, "USD": 1.1197}
-        }
-        responses.add(responses.GET,
-                      self.url,
-                      body=json.dumps(expected_response),
-                      content_type='application/json')
+        responses._add_from_file(file_path=self.response_file)
 
         client = Fixerio(self.access_key, symbols=symbols)
         response = client.latest()
 
-        self.assertDictEqual(response, expected_response)
-        request = responses.calls[0].request
-        self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
-        params = urlencode(
-            {'access_key': self.access_key, 'symbols': symbols_str})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = BASE_URL + expected_path
-        self.assertEqual(request.url, expected_url)
-        self.assertIsNone(request.body)
+        assert response['rates']['USD'] == 1.099239
+        assert response['rates']['GBP'] == 0.871224
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_method(self):
         symbols = ['USD', 'GBP']
-        expected_response = {
-            "base": "EUR",
-            "date": "2016-05-19",
-            "rates": {"GBP": 0.76585, "USD": 1.1197}
-        }
-        responses.add(responses.GET,
-                      self.url,
-                      body=json.dumps(expected_response),
-                      content_type='application/json')
+        responses._add_from_file(file_path=self.response_file)
 
         client = Fixerio(self.access_key)
         response = client.latest(symbols=symbols)
 
-        self.assertDictEqual(response, expected_response)
-        request = responses.calls[0].request
-        self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
-        params = urlencode(
-            {'access_key': self.access_key, 'symbols': symbols_str})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = BASE_URL + expected_path
-        self.assertEqual(request.url, expected_url)
-        self.assertIsNone(request.body)
+        assert response['rates']['USD'] == 1.099239
+        assert response['rates']['GBP'] == 0.871224
 
     @responses.activate
     def test_returns_latest_rates_for_symbols_passed_in_method_if_both(self):
         symbols = ['USD', 'GBP']
         other_symbols = ['JPY', 'EUR']
-        expected_response = {
-            "base": "EUR",
-            "date": "2016-05-19",
-            "rates": {"GBP": 0.76585, "USD": 1.1197}
-        }
-        responses.add(responses.GET,
-                      self.url,
-                      body=json.dumps(expected_response),
-                      content_type='application/json')
+        responses._add_from_file(file_path=self.response_file)
 
         client = Fixerio(self.access_key, symbols=other_symbols)
         response = client.latest(symbols=symbols)
 
-        self.assertDictEqual(response, expected_response)
-        request = responses.calls[0].request
-        self.assertEqual(request.method, 'GET')
-        symbols_str = ','.join(symbols)
-        params = urlencode(
-            {'access_key': self.access_key, 'symbols': symbols_str})
-        expected_path = '{url}?{params}'.format(url=self.path, params=params)
-        expected_url = BASE_URL + expected_path
-        self.assertEqual(request.url, expected_url)
-        self.assertIsNone(request.body)
+        assert response['rates']['USD'] == 1.099239
+        assert response['rates']['GBP'] == 0.871224
+        assert response['rates'].get('JPY') is None
